@@ -1,4 +1,3 @@
-TetraEngine/.vs/
-.exe
-.pdb
-.tlog
+/TetraEngine/.vs
+*.tlog
+/TetraEngine/TetraEngine/x64
