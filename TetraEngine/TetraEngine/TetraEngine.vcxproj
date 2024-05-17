@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ExternalIncludePath>C:\Users\pchyo\source\repos\TetraEngine\TetraEngine\include;$(ExternalIncludePath)</ExternalIncludePath>
-    <LibraryPath>C:\Users\pchyo\source\repos\TetraEngine\TetraEngine\lib;$(LibraryPath)</LibraryPath>
+    <ExternalIncludePath>$(SolutionDir)\TetraEngine\include;$(ExternalIncludePath)</ExternalIncludePath>
+    <LibraryPath>$(SolutionDir)\TetraEngine\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
