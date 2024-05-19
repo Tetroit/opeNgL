@@ -24,6 +24,7 @@ class VertexData
 
 		int id;
 		std::vector<Vertex> verts;
+		std::vector<unsigned int> faces;
 		float* vert;
 		Shader* shader;
 		Texture2D* texture;
@@ -34,6 +35,7 @@ class VertexData
 		void Setup();
 		void Update();
 		void LoadVerts(Vertex* ptr, int size);
+		void LoadFaces(unsigned int* ptr, int size);
 		void AddVert(Vertex vert);
 		void Draw();
 		void Transform(glm::mat4 transform);

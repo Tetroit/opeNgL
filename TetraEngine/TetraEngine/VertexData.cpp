@@ -5,7 +5,8 @@
 
 #include "VertexData.h"
 
-extern std::vector<float> verts;
+extern std::vector<Vertex> verts;
+extern std::vector<unsigned int> faces;
 extern float* vert;
 extern Shader* shader;
 extern Texture2D* texture;
@@ -18,13 +19,9 @@ VertexData::VertexData(int id) : id(id)
 {
     vert = NULL;
     verts = {};
+    faces = {};
 }
 void VertexData::Setup() {
-
-    unsigned int index[] = {
-        0,1,2,
-        1,2,3,
-    };
     
     shader = new Shader("shaders/vertexShader.glvs", "shaders/fragmentShader.glfs");
     texture = new Texture2D();
@@ -39,14 +36,18 @@ void VertexData::Setup() {
     glBindVertexArray(VAO);
 
     if (verts.size() == 0)
-        std::cout << "womp womp";
+        std::cout << "VERTEX BUFFER IS EMPTY";
     else {
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBufferData(GL_ARRAY_BUFFER, verts.size() * sizeof(Vertex), &verts[0], GL_STATIC_DRAW);
     }
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(index), index, GL_STATIC_DRAW);
+    if (faces.size() == 0)
+        std::cout << "ELEMENT BUFFER IS EMPTY";
+    else {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, faces.size()*sizeof(unsigned int), &faces[0], GL_STATIC_DRAW);
+    }
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(0));
     glEnableVertexAttribArray(0);
@@ -90,5 +91,13 @@ void VertexData::LoadVerts(Vertex* ptr, int size)
     for (int i = 0; i < size; i++)
     {
         verts.push_back(ptr[i]);
+    }
+}
+void VertexData::LoadFaces(unsigned int* ptr, int size)
+{
+    faces.clear();
+    for (int i = 0; i < size; i++)
+    {
+        faces.push_back(ptr[i]);
     }
 }

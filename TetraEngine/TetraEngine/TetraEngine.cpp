@@ -46,7 +46,14 @@ int main()
 		Vertex(-0.5f,  0.5f, 0.0f,/*color*/ 1.0f, 0.0f, 0.0f, /*uv*/ 0.0f, 1.0f),
 		Vertex(0.5f,  0.5f, 0.0f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
 	};
+
+	unsigned int index[] = {
+		0,1,2,
+		1,2,3,
+	};
+
 	vd.LoadVerts(vertices, 4);
+	vd.LoadFaces(index, 6);
 	vd.Setup();
 
 	while (!glfwWindowShouldClose(window))
