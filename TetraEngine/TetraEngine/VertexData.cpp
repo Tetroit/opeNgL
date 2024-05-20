@@ -23,7 +23,6 @@ VertexData::VertexData(int id) : id(id)
 }
 void VertexData::Setup() {
     
-    shader = new Shader("shaders/vertexShader.glvs", "shaders/fragmentShader.glfs");
     texture = new Texture2D();
     texture->Load("Assets/container.jpg");
 
@@ -61,13 +60,13 @@ void VertexData::Setup() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
+    transform = glm::mat4(1.0f);
 }
 
 void VertexData::Update() {
     shader->Use();
 
-    transform = glm::mat4(1.0f);
-    transform = glm::rotate(transform, Time::time, glm::vec3(0.0f, 0.9f, 0.1f));
+    transform = glm::rotate(transform, Time::deltaTime, glm::vec3(0.0f, 0.9f, 0.1f));
     //transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 1.0f));
     Transform(transform);
 
