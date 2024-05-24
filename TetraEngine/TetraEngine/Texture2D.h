@@ -15,5 +15,6 @@ public:
 	unsigned char* data;
 	void Load(const char* name);
 	void Bind();
+	void Unbind();
 };
 

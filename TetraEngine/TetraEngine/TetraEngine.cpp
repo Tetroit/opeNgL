@@ -16,7 +16,11 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
-
+void InitialisePresets()
+{
+	Shader::InitialiseShaders();
+	VertexData::InitialisePrefabs();
+}
 Camera mainCamera = Camera(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 float lastMouseX, lastMouseY;
 
@@ -48,32 +52,71 @@ int main()
 		return -1;
 	}
 
+	glEnable(GL_DEPTH_TEST);
+	InitialisePresets();
 	Shader shader = Shader("shaders/vertexShader.glvs", "shaders/fragmentShader.glfs");
 
-	VertexData vd = VertexData(0);
+	VertexData* vd = VertexData::CreateVertexData(1);
 	Vertex vertices[] = {
-		Vertex(-0.5f, -0.5f, 0.0f, /*color*/ 0.0f, 1.0f, 0.0f, /*uv*/ 0.0f, 0.0f),
-		Vertex(0.5f, -0.5f, 0.0f, /*color*/ 0.0f, 0.0f, 1.0f, /*uv*/ 1.0f, 0.0f),
-		Vertex(-0.5f,  0.5f, 0.0f,/*color*/ 1.0f, 0.0f, 0.0f, /*uv*/ 0.0f, 1.0f),
-		Vertex(0.5f,  0.5f, 0.0f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
-	};
 
-	vd.shader = &shader;
+		Vertex(-0.5f, -0.5f, 0.5f,/*color*/ 0.0f, 0.0f, 1.0f, /*uv*/ 0.0f, 0.0f),
+		Vertex(0.5f, -0.5f, 0.5f, /*color*/ 1.0f, 0.0f, 1.0f, /*uv*/ 1.0f, 0.0f),
+		Vertex(-0.5f,  0.5f, 0.5f,/*color*/ 0.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
+		Vertex(0.5f,  0.5f, 0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
+
+		Vertex(-0.5f, -0.5f, -0.5f,/*color*/ 0.0f, 0.0f, 0.0f, /*uv*/ 0.0f, 0.0f),
+		Vertex(0.5f, -0.5f, -0.5f, /*color*/ 1.0f, 0.0f, 0.0f, /*uv*/ 1.0f, 0.0f),
+		Vertex(-0.5f,  0.5f, -0.5f,/*color*/ 0.0f, 1.0f, 0.0f, /*uv*/ 0.0f, 1.0f),
+		Vertex(0.5f,  0.5f, -0.5f, /*color*/ 1.0f, 1.0f, 0.0f, /*uv*/ 1.0f, 1.0f),
+
+		Vertex(-0.5f, -0.5f, -0.5f,/*color*/ 0.0f, 0.0f, 0.0f, /*uv*/ 0.0f, 0.0f),
+		Vertex(0.5f, -0.5f, -0.5f, /*color*/ 1.0f, 0.0f, 0.0f, /*uv*/ 1.0f, 0.0f),
+		Vertex(-0.5f,  -0.5f, 0.5f,/*color*/ 0.0f, 0.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
+		Vertex(0.5f,  -0.5f, 0.5f, /*color*/ 1.0f, 0.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
+
+		Vertex(-0.5f, 0.5f, -0.5f,/*color*/ 0.0f, 1.0f, 0.0f, /*uv*/ 0.0f, 0.0f),
+		Vertex(0.5f, 0.5f, -0.5f, /*color*/ 1.0f, 1.0f, 0.0f, /*uv*/ 1.0f, 0.0f),
+		Vertex(-0.5f,  0.5f, 0.5f,/*color*/ 0.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
+		Vertex(0.5f,  0.5f, 0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
+
+		Vertex(-0.5f, -0.5f, -0.5f,/*color*/ 0.0f, 0.0f, 0.0f, /*uv*/ 0.0f, 0.0f),
+		Vertex(-0.5f, 0.5f, -0.5f, /*color*/ 0.0f, 1.0f, 0.0f, /*uv*/ 1.0f, 0.0f),
+		Vertex(-0.5f,  -0.5f, 0.5f,/*color*/ 0.0f, 0.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
+		Vertex(-0.5f,  0.5f, 0.5f, /*color*/ 0.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
+
+		Vertex(0.5f, -0.5f, -0.5f,/*color*/ 1.0f, 0.0f, 0.0f, /*uv*/ 0.0f, 0.0f),
+		Vertex(0.5f, 0.5f, -0.5f, /*color*/ 1.0f, 1.0f, 0.0f, /*uv*/ 1.0f, 0.0f),
+		Vertex(0.5f,  -0.5f, 0.5f,/*color*/ 1.0f, 0.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
+		Vertex(0.5f,  0.5f, 0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
+	};
 
 	unsigned int index[] = {
 		0,1,2,
 		1,2,3,
+		4,5,6,
+		5,6,7,
+		8,9,10,
+		9,10,11,
+		12,13,14,
+		13,14,15,
+		16,17,18,
+		17,18,19,
+		20,21,22,
+		21,22,23,
 	};
 
-	vd.LoadVerts(vertices, 4);
-	vd.LoadFaces(index, 6);
-	vd.Setup();
+	vd->shader = &shader;
+	vd->LoadVerts(vertices, 4*6);
+	vd->LoadFaces(index, 6*6);
+	//vd.setTexture("Assets/awesomeface.png");
+	vd->Setup();
+
 
 	glm::mat4 projectionView = glm::perspective((float)glm::radians(45.0), (float)width / (float)height, 0.1f, 100.0f);
 
 
 	glm::mat4 cameraTransform = mainCamera.GetViewMatrix();
-	vd.transform *= glm::mat4(1);
+	vd->transform *= glm::mat4(1);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -81,16 +124,18 @@ int main()
 		processInput(window);
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		cameraTransform = mainCamera.GetViewMatrix();
+		VertexData::GetPrefab(0)->shader->Use();
+		Shader::editorPlainShader->SetMat4("projection", projectionView);
+		Shader::editorPlainShader->SetMat4("view", cameraTransform);
+		VertexData::GetPrefab(0)->Update();
 
-		unsigned int ploc = glGetUniformLocation(shader.ID, "projection");
-		glUniformMatrix4fv(ploc, 1, GL_FALSE, glm::value_ptr(projectionView));
-		unsigned int loc = glGetUniformLocation(shader.ID, "view");
-		glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(cameraTransform));
-
-		vd.Update();
+		vd->shader->Use();
+		shader.SetMat4("projection", projectionView);
+		shader.SetMat4("view", cameraTransform);
+		vd->Update();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

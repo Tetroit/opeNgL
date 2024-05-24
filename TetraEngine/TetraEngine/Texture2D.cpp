@@ -22,7 +22,9 @@ void Texture2D::Load(const char* name) {
 	data = stbi_load(name, &width, &height, &channels, 0);
 	if (data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		int channelMode = GL_RGB;
+		if (channels == 4) channelMode = GL_RGBA;
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, channelMode, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
@@ -33,4 +35,8 @@ void Texture2D::Load(const char* name) {
 void Texture2D::Bind()
 {
 	glBindTexture(GL_TEXTURE_2D, texture);
+}
+void Texture2D::Unbind()
+{
+	glBindTexture(GL_TEXTURE_2D, NULL);
 }

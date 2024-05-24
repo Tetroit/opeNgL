@@ -8,6 +8,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
+#define VD_RECTANGLE = 0;
+
 struct Vertex
 {
 	float x, y, z;
@@ -21,8 +23,13 @@ struct Vertex
 class VertexData
 {
 	public:
+		static std::vector<VertexData> collection;
+		static void InitialisePrefabs();
+		static VertexData* GetPrefab(int id);
+		static VertexData* CreateVertexData(int id);
 
 		int id;
+		glm::mat4 transform = glm::mat4(1);
 		std::vector<Vertex> verts;
 		std::vector<unsigned int> faces;
 		float* vert;
@@ -39,6 +46,7 @@ class VertexData
 		void AddVert(Vertex vert);
 		void Draw();
 		void Transform(glm::mat4 transform);
-		glm::mat4 transform = glm::mat4(1);
+		void setTexture(Texture2D* texture);
+		void setTexture(const char* name);
 };
 
