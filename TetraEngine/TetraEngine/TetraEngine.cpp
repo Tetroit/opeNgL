@@ -6,10 +6,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
-#include "VertexData.h"
 #include "Time.h"
-#include "Camera.h"
-#include "MeshRenderer.h"
+#include "GameObject.h"
 
 extern void processInput(GLFWwindow* window);
 extern void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
@@ -21,6 +19,7 @@ void InitialisePresets()
 {
 	Shader::InitialiseShaders();
 	VertexData::InitialisePrefabs();
+	MeshRenderer::InitialiseRenderer();
 }
 Camera mainCamera = Camera(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 float lastMouseX, lastMouseY;
@@ -107,17 +106,15 @@ int main()
 	};
 
 	MeshRenderer renderer = MeshRenderer(vd, &shader);
+	GameObject box = GameObject(glm::vec3(0, 0, 0));
+	//box.renderer = &renderer;
 	vd->LoadVerts(vertices, 4*6);
 	vd->LoadFaces(index, 6*6);
 	//vd.setTexture("Assets/awesomeface.png");
 	vd->Setup();
 
-
-	glm::mat4 projectionView = glm::perspective((float)glm::radians(45.0), (float)width / (float)height, 0.1f, 100.0f);
-
-
-	glm::mat4 cameraTransform = mainCamera.GetViewMatrix();
-	vd->transform *= glm::mat4(1);
+	mainCamera.projectionView = glm::perspective((float)glm::radians(45.0), (float)width / (float)height, 0.1f, 100.0f);
+	glm::mat4 cameraTransform;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -127,16 +124,7 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		cameraTransform = mainCamera.GetViewMatrix();
-		Shader::billboardShader->Use();
-		Shader::billboardShader->SetMat4("projection", projectionView);
-		Shader::billboardShader->SetMat4("view", cameraTransform);
-		VertexData::GetPrefab(0)->Update();
-
-		shader.Use();
-		shader.SetMat4("projection", projectionView);
-		shader.SetMat4("view", cameraTransform);
-		renderer.Render();
+		box.Render();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

@@ -7,19 +7,18 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
-#include "Shader.h"
-#include "VertexData.h"
+#include "MeshRenderer.h"
 
 class GameObject
 {
 public:
 	glm::mat4 transform;
 	GameObject* parent;
-	VertexData* renderAs;
+	MeshRenderer* renderer;
 	std::vector<GameObject*> children;
 	GameObject(glm::vec3 pos);
 	void AddChild(GameObject* child);
-	void Render(Shader* shader);
+	void Render();
 	void getGlobalPos();
 };
 

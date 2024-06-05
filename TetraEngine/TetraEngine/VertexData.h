@@ -29,7 +29,6 @@ class VertexData
 		static VertexData* CreateVertexData(int id);
 
 		int id;
-		glm::mat4 transform = glm::mat4(1);
 		std::vector<Vertex> verts;
 		std::vector<unsigned int> faces;
 		float* vert;

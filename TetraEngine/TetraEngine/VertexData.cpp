@@ -14,21 +14,19 @@ extern Texture2D* texture = nullptr;
 extern unsigned int VBO;
 extern unsigned int VAO;
 extern unsigned int EBO;
-extern glm::mat4 transform;
 
 VertexData::VertexData(int id) : id(id)
 {
     vert = NULL;
     verts = {};
     faces = {};
-    transform = glm::mat4(1.0f);
 }
 VertexData* VertexData::CreateVertexData(int id)
 {
-    if (id > collection.size() || id < 0)
+    if (id >= collection.size() || id < 0)
     {
         id = collection.size();
-        collection.push_back(VertexData(id));
+        collection.emplace_back(VertexData(id));
     }
     else
     {
@@ -92,10 +90,6 @@ void VertexData::Draw()
     glBindVertexArray(0);
     texture->Unbind();
 }
-void VertexData::Transform(glm::mat4 transform)
-{
-    this->transform = transform;
-}
 void VertexData::AddVert(Vertex vert)
 {
     verts.push_back(vert);
@@ -143,7 +137,6 @@ void VertexData::InitialisePrefabs() {
     rect->LoadVerts(vertices,4);
     rect->LoadFaces(index,6);
     rect->Setup();
-    rect->transform = glm::scale(rect->transform, glm::vec3(2,2,2));
 
 }
 VertexData* VertexData::GetPrefab(int id) {
