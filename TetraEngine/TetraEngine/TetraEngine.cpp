@@ -105,9 +105,9 @@ int main()
 		21,22,23,
 	};
 
-	MeshRenderer renderer = MeshRenderer(vd, &shader);
+	MeshRenderer renderer = MeshRenderer(VertexData::GetPrefab(1), &shader);
 	GameObject box = GameObject(glm::vec3(0, 0, 0));
-	box.renderer = renderer;
+	//box.renderer = renderer;
 	vd->LoadVerts(vertices, 4*6);
 	vd->LoadFaces(index, 6*6);
 	//vd.setTexture("Assets/awesomeface.png");
