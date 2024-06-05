@@ -5,7 +5,7 @@
 
 #include "VertexData.h"
 
-std::vector<VertexData> VertexData::collection = std::vector<VertexData>{};
+std::vector<std::shared_ptr<VertexData>> VertexData::collection = std::vector<std::shared_ptr<VertexData>>{};
 
 extern std::vector<Vertex> verts;
 extern std::vector<unsigned int> faces;
@@ -23,17 +23,17 @@ VertexData::VertexData(int id) : id(id)
 }
 std::shared_ptr<VertexData> VertexData::CreateVertexData(int id)
 {
-    VertexData vd = VertexData(id);
+    std::shared_ptr<VertexData> vd = std::make_shared<VertexData>(id);
     if (id >= collection.size() || id < 0)
     {
         id = collection.size();
-        collection.push_back(vd);
+        collection.push_back(std::move(vd));
     }
     else
     {
-        collection.insert(collection.begin() + id,VertexData(vd));
+        collection.insert(collection.begin() + id, std::move(vd));
     }
-    return std::shared_ptr<VertexData>(&collection[id]);
+    return collection[id];
 }
 void VertexData::Setup() {
     
@@ -123,7 +123,6 @@ void VertexData::setTexture(const char* path)
 void VertexData::InitialisePrefabs() {
 
     std::shared_ptr<VertexData> rect = VertexData::CreateVertexData(0);
-
     Vertex vertices[] = {
         Vertex(-0.5f, -0.5f, 0.0f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 0.0f),
         Vertex(0.5f, -0.5f, 0.0f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 0.0f),
@@ -135,11 +134,11 @@ void VertexData::InitialisePrefabs() {
         1, 2, 3,
     };
 
-    rect->LoadVerts(vertices,4);
-    rect->LoadFaces(index,6);
-    rect->Setup();
+    rect.get()->LoadVerts(vertices,4);
+    rect.get()->LoadFaces(index,6);
+    rect.get()->Setup();
 
 }
 std::shared_ptr<VertexData> VertexData::GetPrefab(int id) {
-    return std::shared_ptr<VertexData>(&collection[id]);
+    return collection[id];
 }
