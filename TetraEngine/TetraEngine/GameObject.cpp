@@ -1,13 +1,12 @@
 #include "GameObject.h"
 
 extern GameObject* parent;
-extern MeshRenderer* renderer;
+extern MeshRenderer renderer;
 extern glm::mat4;
 
 GameObject::GameObject(glm::vec3 pos)
 {
 	transform = glm::mat4(1);
-	renderer = MeshRenderer::defaultRenderer;
 	transform[3][0] = pos.x;
 	transform[3][1] = pos.y;
 	transform[3][2] = pos.z;
@@ -20,7 +19,7 @@ void GameObject::AddChild (GameObject* child)
 }
 void GameObject::Render()
 {
-	renderer->Render(transform);
+	renderer.Render(transform);
 }
 void GameObject::getGlobalPos()
 {

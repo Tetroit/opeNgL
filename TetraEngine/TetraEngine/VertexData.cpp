@@ -21,18 +21,19 @@ VertexData::VertexData(int id) : id(id)
     verts = {};
     faces = {};
 }
-VertexData* VertexData::CreateVertexData(int id)
+std::shared_ptr<VertexData> VertexData::CreateVertexData(int id)
 {
+    VertexData vd = VertexData(id);
     if (id >= collection.size() || id < 0)
     {
         id = collection.size();
-        collection.emplace_back(VertexData(id));
+        collection.push_back(vd);
     }
     else
     {
-        collection.insert(collection.begin() + id,VertexData(id));
+        collection.insert(collection.begin() + id,VertexData(vd));
     }
-    return GetPrefab(id);
+    return std::shared_ptr<VertexData>(&collection[id]);
 }
 void VertexData::Setup() {
     
@@ -121,7 +122,7 @@ void VertexData::setTexture(const char* path)
 }
 void VertexData::InitialisePrefabs() {
 
-    VertexData* rect = VertexData::CreateVertexData(0);
+    std::shared_ptr<VertexData> rect = VertexData::CreateVertexData(0);
 
     Vertex vertices[] = {
         Vertex(-0.5f, -0.5f, 0.0f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 0.0f),
@@ -139,6 +140,6 @@ void VertexData::InitialisePrefabs() {
     rect->Setup();
 
 }
-VertexData* VertexData::GetPrefab(int id) {
-    return &collection[id];
+std::shared_ptr<VertexData> VertexData::GetPrefab(int id) {
+    return std::shared_ptr<VertexData>(&collection[id]);
 }

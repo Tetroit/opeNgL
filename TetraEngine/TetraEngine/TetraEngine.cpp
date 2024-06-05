@@ -56,7 +56,7 @@ int main()
 	InitialisePresets();
 	Shader shader = Shader("shaders/lit.glvs", "shaders/lit.glfs");
 
-	VertexData* vd = VertexData::CreateVertexData(1);
+	std::shared_ptr<VertexData> vd = VertexData::CreateVertexData(1);
 	Vertex vertices[] = {
 
 		Vertex(-0.5f, -0.5f, 0.5f,/*color*/ 0.0f, 0.0f, 1.0f, /*uv*/ 0.0f, 0.0f),
@@ -107,7 +107,7 @@ int main()
 
 	MeshRenderer renderer = MeshRenderer(vd, &shader);
 	GameObject box = GameObject(glm::vec3(0, 0, 0));
-	//box.renderer = &renderer;
+	box.renderer = renderer;
 	vd->LoadVerts(vertices, 4*6);
 	vd->LoadFaces(index, 6*6);
 	//vd.setTexture("Assets/awesomeface.png");

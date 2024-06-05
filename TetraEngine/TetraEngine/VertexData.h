@@ -25,8 +25,8 @@ class VertexData
 	public:
 		static std::vector<VertexData> collection;
 		static void InitialisePrefabs();
-		static VertexData* GetPrefab(int id);
-		static VertexData* CreateVertexData(int id);
+		static std::shared_ptr<VertexData> GetPrefab(int id);
+		static std::shared_ptr<VertexData> CreateVertexData(int id);
 
 		int id;
 		std::vector<Vertex> verts;

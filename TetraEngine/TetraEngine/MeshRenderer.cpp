@@ -1,12 +1,12 @@
 #include "MeshRenderer.h"
 
-MeshRenderer* MeshRenderer::defaultRenderer = nullptr;
+MeshRenderer MeshRenderer::defaultRenderer = MeshRenderer(nullptr, nullptr);
 
-extern VertexData* mesh;
+extern std::shared_ptr<VertexData> mesh;
 extern Shader* shader;
 extern Camera* camera;
 
-MeshRenderer::MeshRenderer(VertexData* vd, Shader* sh) : mesh(vd), shader(sh) {
+MeshRenderer::MeshRenderer(std::shared_ptr<VertexData> vd, Shader* sh) : mesh(vd), shader(sh) {
 
 }
 void MeshRenderer::Render(glm::mat4 transform) {
@@ -20,7 +20,7 @@ void MeshRenderer::Render(glm::mat4 transform) {
     }
     else
     {
-        VertexData* vd =VertexData::GetPrefab(0);
+        std::shared_ptr<VertexData> vd =VertexData::GetPrefab(0);
         Shader* sh = Shader::billboardShader;
         sh->Use();
         sh->SetMat4("projection", Camera::main->projectionView);
@@ -32,6 +32,5 @@ void MeshRenderer::Render(glm::mat4 transform) {
 }
 
 void MeshRenderer::InitialiseRenderer() {
-    MeshRenderer mr = MeshRenderer(VertexData::GetPrefab(0), Shader::billboardShader);
-    defaultRenderer = &mr;
+    defaultRenderer = MeshRenderer(VertexData::GetPrefab(0), Shader::billboardShader);
 }

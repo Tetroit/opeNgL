@@ -8,13 +8,13 @@ class MeshRenderer
 {
 
 public:
-	static MeshRenderer* defaultRenderer;
+	static MeshRenderer defaultRenderer;
 
-	VertexData* mesh;
+	std::shared_ptr<VertexData> mesh;
 	Shader* shader;
 	Camera* camera;
 	void Render(glm::mat4 transform = glm::mat4(1));
-	MeshRenderer(VertexData* vd, Shader* sh);
+	MeshRenderer(std::shared_ptr<VertexData> vd, Shader* sh);
 	static void InitialiseRenderer();
 };
 
