@@ -1,7 +1,7 @@
 
 #include "Shader.h"
 
-Shader* Shader::editorPlainShader = nullptr;
+Shader* Shader::billboardShader = nullptr;
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
 	std::string vertexCode;
@@ -101,5 +101,5 @@ void Shader::SetMat4(const std::string& name, glm::mat4 &value) const
 }
 
 void Shader::InitialiseShaders() {
-    editorPlainShader = new Shader("shaders/editorPlain.glvs", "shaders/editorPlain.glfs");
+    billboardShader = new Shader("shaders/billboard.glvs", "shaders/billboard.glfs");
 }

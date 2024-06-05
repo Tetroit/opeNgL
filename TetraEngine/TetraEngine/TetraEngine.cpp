@@ -9,6 +9,7 @@
 #include "VertexData.h"
 #include "Time.h"
 #include "Camera.h"
+#include "MeshRenderer.h"
 
 extern void processInput(GLFWwindow* window);
 extern void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
@@ -54,7 +55,7 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 	InitialisePresets();
-	Shader shader = Shader("shaders/vertexShader.glvs", "shaders/fragmentShader.glfs");
+	Shader shader = Shader("shaders/lit.glvs", "shaders/lit.glfs");
 
 	VertexData* vd = VertexData::CreateVertexData(1);
 	Vertex vertices[] = {
@@ -105,7 +106,7 @@ int main()
 		21,22,23,
 	};
 
-	vd->shader = &shader;
+	MeshRenderer renderer = MeshRenderer(vd, &shader);
 	vd->LoadVerts(vertices, 4*6);
 	vd->LoadFaces(index, 6*6);
 	//vd.setTexture("Assets/awesomeface.png");
@@ -127,15 +128,15 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		cameraTransform = mainCamera.GetViewMatrix();
-		VertexData::GetPrefab(0)->shader->Use();
-		Shader::editorPlainShader->SetMat4("projection", projectionView);
-		Shader::editorPlainShader->SetMat4("view", cameraTransform);
+		Shader::billboardShader->Use();
+		Shader::billboardShader->SetMat4("projection", projectionView);
+		Shader::billboardShader->SetMat4("view", cameraTransform);
 		VertexData::GetPrefab(0)->Update();
 
-		vd->shader->Use();
+		shader.Use();
 		shader.SetMat4("projection", projectionView);
 		shader.SetMat4("view", cameraTransform);
-		vd->Update();
+		renderer.Render();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

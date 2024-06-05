@@ -1,6 +1,7 @@
 #include "GameObject.h"
 
 extern GameObject* parent;
+extern VertexData* renderAs;
 extern glm::mat4;
 
 GameObject::GameObject(glm::vec3 pos)
@@ -8,6 +9,7 @@ GameObject::GameObject(glm::vec3 pos)
 	transform[0][3] = pos.x;
 	transform[1][3] = pos.y;
 	transform[2][3] = pos.z;
+	
 }
 void GameObject::AddChild (GameObject* child)
 {
@@ -17,6 +19,7 @@ void GameObject::AddChild (GameObject* child)
 void GameObject::Render(Shader* shader)
 {
 	shader->Use();
+	renderAs->Draw();
 }
 void GameObject::getGlobalPos()
 {

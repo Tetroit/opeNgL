@@ -10,7 +10,6 @@ std::vector<VertexData> VertexData::collection = std::vector<VertexData>{};
 extern std::vector<Vertex> verts;
 extern std::vector<unsigned int> faces;
 extern float* vert;
-extern Shader* shader;
 extern Texture2D* texture = nullptr;
 extern unsigned int VBO;
 extern unsigned int VAO;
@@ -22,8 +21,7 @@ VertexData::VertexData(int id) : id(id)
     vert = NULL;
     verts = {};
     faces = {};
-    transform = glm::mat4(0.5f);
-    transform = glm::rotate(transform, 1.0f, glm::vec3(0.0f, 0.9f, 0.1f));
+    transform = glm::mat4(1.0f);
 }
 VertexData* VertexData::CreateVertexData(int id)
 {
@@ -88,9 +86,6 @@ void VertexData::Update() {
 }
 void VertexData::Draw()
 {
-    shader->Use();
-    //std::cout << shader->ID << '\n';
-    shader->SetMat4("transform", transform);
     texture->Bind();
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, faces.size(), GL_UNSIGNED_INT, 0);
@@ -145,7 +140,6 @@ void VertexData::InitialisePrefabs() {
         1, 2, 3,
     };
 
-    rect->shader = Shader::editorPlainShader;
     rect->LoadVerts(vertices,4);
     rect->LoadFaces(index,6);
     rect->Setup();

@@ -14,8 +14,16 @@ uniform mat4 view = mat4(1);
 
 void main()
 {
+	mat4 cheatView = view;
+	for (int i=0; i<3; i++)
+	{
+		for (int j=0; j<3; j++)
+		{
+			cheatView[i][j] = (i==j) ? 1 : 0;
+		}
+	}
 	pos = aPos;
 	color = vec4 (aCol, 1.0);
 	texCoord = UVs;
-    gl_Position = view * transform * vec4(aPos, 1.0);
+    gl_Position = projection * cheatView * transform * vec4(aPos , 1.0);
 }

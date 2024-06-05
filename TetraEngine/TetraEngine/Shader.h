@@ -14,7 +14,7 @@
 class Shader
 {
 	public:
-        static Shader* editorPlainShader;
+        static Shader* billboardShader;
 		unsigned int ID;
         Shader(const char* vertexPath, const char* fragmentPath);
         void Use();

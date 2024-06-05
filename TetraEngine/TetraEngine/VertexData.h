@@ -33,7 +33,6 @@ class VertexData
 		std::vector<Vertex> verts;
 		std::vector<unsigned int> faces;
 		float* vert;
-		Shader* shader;
 		Texture2D* texture;
 		unsigned int VBO;
 		unsigned int VAO;

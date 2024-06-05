@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="MeshRenderer.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="TetraEngine.cpp" />
@@ -143,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture2D.h" />
