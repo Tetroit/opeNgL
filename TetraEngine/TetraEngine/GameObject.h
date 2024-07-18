@@ -14,9 +14,10 @@ class GameObject
 public:
 	glm::mat4 transform;
 	GameObject* parent;
-	MeshRenderer renderer = MeshRenderer(VertexData::GetPrefab(0), Shader::billboardShader);
+	MeshRenderer* renderer = &MeshRenderer::defaultRenderer;
 	std::vector<GameObject*> children;
 	GameObject(glm::vec3 pos);
+	GameObject(glm::vec3 pos, MeshRenderer* meshRenderer);
 	void AddChild(GameObject* child);
 	void Render();
 	void getGlobalPos();

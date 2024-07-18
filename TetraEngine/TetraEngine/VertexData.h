@@ -2,13 +2,16 @@
 #include "Shader.h"
 #include "Texture2D.h"
 #include "Time.h"
+#include "OBJParser.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
-#define VD_RECTANGLE = 0;
+#define VD_RECTANGLE 0
+#define VD_CUBE 1
+#define VD_SUZANNE 2
 
 struct Vertex
 {
@@ -32,7 +35,6 @@ class VertexData
 		std::vector<Vertex> verts;
 		std::vector<unsigned int> faces;
 		float* vert;
-		Texture2D* texture;
 		unsigned int VBO;
 		unsigned int VAO;
 		unsigned int EBO;
@@ -44,7 +46,5 @@ class VertexData
 		void AddVert(Vertex vert);
 		void Draw();
 		void Transform(glm::mat4 transform);
-		void setTexture(Texture2D* texture);
-		void setTexture(const char* name);
 };
 

@@ -56,62 +56,11 @@ int main()
 	InitialisePresets();
 	Shader shader = Shader("shaders/lit.glvs", "shaders/lit.glfs");
 
-	std::shared_ptr<VertexData> vd = VertexData::CreateVertexData(1);
-	Vertex vertices[] = {
-
-		Vertex(-0.5f, -0.5f, 0.5f,/*color*/ 0.0f, 0.0f, 1.0f, /*uv*/ 0.0f, 0.0f),
-		Vertex(0.5f, -0.5f, 0.5f, /*color*/ 1.0f, 0.0f, 1.0f, /*uv*/ 1.0f, 0.0f),
-		Vertex(-0.5f,  0.5f, 0.5f,/*color*/ 0.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
-		Vertex(0.5f,  0.5f, 0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
-
-		Vertex(-0.5f, -0.5f, -0.5f,/*color*/ 0.0f, 0.0f, 0.0f, /*uv*/ 0.0f, 0.0f),
-		Vertex(0.5f, -0.5f, -0.5f, /*color*/ 1.0f, 0.0f, 0.0f, /*uv*/ 1.0f, 0.0f),
-		Vertex(-0.5f,  0.5f, -0.5f,/*color*/ 0.0f, 1.0f, 0.0f, /*uv*/ 0.0f, 1.0f),
-		Vertex(0.5f,  0.5f, -0.5f, /*color*/ 1.0f, 1.0f, 0.0f, /*uv*/ 1.0f, 1.0f),
-
-		Vertex(-0.5f, -0.5f, -0.5f,/*color*/ 0.0f, 0.0f, 0.0f, /*uv*/ 0.0f, 0.0f),
-		Vertex(0.5f, -0.5f, -0.5f, /*color*/ 1.0f, 0.0f, 0.0f, /*uv*/ 1.0f, 0.0f),
-		Vertex(-0.5f,  -0.5f, 0.5f,/*color*/ 0.0f, 0.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
-		Vertex(0.5f,  -0.5f, 0.5f, /*color*/ 1.0f, 0.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
-
-		Vertex(-0.5f, 0.5f, -0.5f,/*color*/ 0.0f, 1.0f, 0.0f, /*uv*/ 0.0f, 0.0f),
-		Vertex(0.5f, 0.5f, -0.5f, /*color*/ 1.0f, 1.0f, 0.0f, /*uv*/ 1.0f, 0.0f),
-		Vertex(-0.5f,  0.5f, 0.5f,/*color*/ 0.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
-		Vertex(0.5f,  0.5f, 0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
-
-		Vertex(-0.5f, -0.5f, -0.5f,/*color*/ 0.0f, 0.0f, 0.0f, /*uv*/ 0.0f, 0.0f),
-		Vertex(-0.5f, 0.5f, -0.5f, /*color*/ 0.0f, 1.0f, 0.0f, /*uv*/ 1.0f, 0.0f),
-		Vertex(-0.5f,  -0.5f, 0.5f,/*color*/ 0.0f, 0.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
-		Vertex(-0.5f,  0.5f, 0.5f, /*color*/ 0.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
-
-		Vertex(0.5f, -0.5f, -0.5f,/*color*/ 1.0f, 0.0f, 0.0f, /*uv*/ 0.0f, 0.0f),
-		Vertex(0.5f, 0.5f, -0.5f, /*color*/ 1.0f, 1.0f, 0.0f, /*uv*/ 1.0f, 0.0f),
-		Vertex(0.5f,  -0.5f, 0.5f,/*color*/ 1.0f, 0.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
-		Vertex(0.5f,  0.5f, 0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
-	};
-
-	unsigned int index[] = {
-		0,1,2,
-		1,2,3,
-		4,5,6,
-		5,6,7,
-		8,9,10,
-		9,10,11,
-		12,13,14,
-		13,14,15,
-		16,17,18,
-		17,18,19,
-		20,21,22,
-		21,22,23,
-	};
-
-	MeshRenderer renderer = MeshRenderer(VertexData::GetPrefab(1), &shader);
+	
+	MeshRenderer renderer2D = MeshRenderer(VertexData::GetPrefab(VD_CUBE), &shader);
+	MeshRenderer renderer3D = MeshRenderer(VertexData::GetPrefab(VD_SUZANNE), &shader);
+	renderer3D.setTexture("Assets/debug.jpeg");
 	GameObject box = GameObject(glm::vec3(0, 0, 0));
-	//box.renderer = renderer;
-	vd->LoadVerts(vertices, 4*6);
-	vd->LoadFaces(index, 6*6);
-	//vd.setTexture("Assets/awesomeface.png");
-	vd->Setup();
 
 	mainCamera.projectionView = glm::perspective((float)glm::radians(45.0), (float)width / (float)height, 0.1f, 100.0f);
 	glm::mat4 cameraTransform;
@@ -124,7 +73,9 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		box.Render();
+		//box.Render();
+		//renderer2D.Render();
+		renderer3D.Render();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

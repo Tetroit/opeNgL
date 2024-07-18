@@ -10,7 +10,6 @@ std::vector<std::shared_ptr<VertexData>> VertexData::collection = std::vector<st
 extern std::vector<Vertex> verts;
 extern std::vector<unsigned int> faces;
 extern float* vert;
-extern Texture2D* texture = nullptr;
 extern unsigned int VBO;
 extern unsigned int VAO;
 extern unsigned int EBO;
@@ -37,11 +36,6 @@ std::shared_ptr<VertexData> VertexData::CreateVertexData(int id)
 }
 void VertexData::Setup() {
     
-    if (texture == nullptr)
-    {
-        setTexture("Assets/container.jpg");
-    }
-    setTexture("Assets/container.jpg");
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glGenVertexArrays(1, &VAO);
@@ -85,11 +79,9 @@ void VertexData::Update() {
 }
 void VertexData::Draw()
 {
-    texture->Bind();
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, faces.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
-    texture->Unbind();
 }
 void VertexData::AddVert(Vertex vert)
 {
@@ -111,33 +103,84 @@ void VertexData::LoadFaces(unsigned int* ptr, int size)
         faces.push_back(ptr[i]);
     }
 }
-void VertexData::setTexture(Texture2D* tex)
-{
-    texture = tex;
-}
-void VertexData::setTexture(const char* path)
-{
-    texture = new Texture2D();
-    texture->Load(path);
-}
 void VertexData::InitialisePrefabs() {
 
     std::shared_ptr<VertexData> rect = VertexData::CreateVertexData(0);
-    Vertex vertices[] = {
+    std::vector<Vertex> vertices = {
         Vertex(-0.5f, -0.5f, 0.0f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 0.0f),
         Vertex(0.5f, -0.5f, 0.0f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 0.0f),
         Vertex(-0.5f,  0.5f, 0.0f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
         Vertex(0.5f,  0.5f, 0.0f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
     };
-    unsigned int index[] = {
+    std::vector<unsigned int> index = {
         0, 1, 2,
         1, 2, 3,
     };
 
-    rect.get()->LoadVerts(vertices,4);
-    rect.get()->LoadFaces(index,6);
+    rect.get()->LoadVerts(&vertices[0],4);
+    rect.get()->LoadFaces(&index[0], 6);
     rect.get()->Setup();
 
+    vertices.clear();
+    index.clear();
+
+    std::shared_ptr<VertexData> cube = VertexData::CreateVertexData(1);
+    vertices.insert(vertices.end(), {
+
+        Vertex(-0.5f, -0.5f, 0.5f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 0.0f),
+        Vertex(0.5f, -0.5f, 0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 0.0f),
+        Vertex(-0.5f,  0.5f, 0.5f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
+        Vertex(0.5f,  0.5f, 0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
+
+        Vertex(-0.5f, -0.5f, -0.5f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 0.0f),
+        Vertex(0.5f, -0.5f, -0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 0.0f),
+        Vertex(-0.5f,  0.5f, -0.5f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
+        Vertex(0.5f,  0.5f, -0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
+
+        Vertex(-0.5f, -0.5f, -0.5f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 0.0f),
+        Vertex(0.5f, -0.5f, -0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 0.0f),
+        Vertex(-0.5f,  -0.5f, 0.5f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
+        Vertex(0.5f,  -0.5f, 0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
+
+        Vertex(-0.5f, 0.5f, -0.5f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 0.0f),
+        Vertex(0.5f, 0.5f, -0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 0.0f),
+        Vertex(-0.5f,  0.5f, 0.5f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
+        Vertex(0.5f,  0.5f, 0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
+
+        Vertex(-0.5f, -0.5f, -0.5f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 0.0f),
+        Vertex(-0.5f, 0.5f, -0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 0.0f),
+        Vertex(-0.5f,  -0.5f, 0.5f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
+        Vertex(-0.5f,  0.5f, 0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
+
+        Vertex(0.5f, -0.5f, -0.5f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 0.0f),
+        Vertex(0.5f, 0.5f, -0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 0.0f),
+        Vertex(0.5f,  -0.5f, 0.5f,/*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 0.0f, 1.0f),
+        Vertex(0.5f,  0.5f, 0.5f, /*color*/ 1.0f, 1.0f, 1.0f, /*uv*/ 1.0f, 1.0f),
+        });
+
+    index.insert(index.end(), {
+        0,1,2,
+        1,2,3,
+        4,5,6,
+        5,6,7,
+        8,9,10,
+        9,10,11,
+        12,13,14,
+        13,14,15,
+        16,17,18,
+        17,18,19,
+        20,21,22,
+        21,22,23,
+    });
+
+    cube.get()->LoadVerts(&vertices[0], 6 * 4);
+    cube.get()->LoadFaces(&index[0], 6 * 6);
+    cube.get()->Setup();
+
+    vertices.clear();
+    index.clear();
+
+    OBJParser::OBJRead("Assets/meshes/suzanne.obj", 2);
 }
 std::shared_ptr<VertexData> VertexData::GetPrefab(int id) {
     return collection[id];

@@ -10,7 +10,14 @@ GameObject::GameObject(glm::vec3 pos)
 	transform[3][0] = pos.x;
 	transform[3][1] = pos.y;
 	transform[3][2] = pos.z;
-	
+}
+GameObject::GameObject(glm::vec3 pos, MeshRenderer* meshRenderer)
+{
+	transform = glm::mat4(1);
+	renderer = meshRenderer;
+	transform[3][0] = pos.x;
+	transform[3][1] = pos.y;
+	transform[3][2] = pos.z;
 }
 void GameObject::AddChild (GameObject* child)
 {
@@ -19,7 +26,7 @@ void GameObject::AddChild (GameObject* child)
 }
 void GameObject::Render()
 {
-	renderer.Render(transform);
+	renderer->Render(transform);
 }
 void GameObject::getGlobalPos()
 {
