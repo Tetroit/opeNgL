@@ -54,13 +54,28 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 	InitialisePresets();
-	Shader shader = Shader("shaders/lit.glvs", "shaders/lit.glfs");
+	GameObject::currentTransform = glm::mat4(1);
 
-	
-	MeshRenderer renderer2D = MeshRenderer(VertexData::GetPrefab(VD_CUBE), &shader);
+	Shader shader = Shader("shaders/lit.glvs", "shaders/lit.glfs");
+	shader.Use();
+	glm::vec4 ambient(0.0f, 0.0f, 1.0f, 1.0f);
+	glm::vec4 diffuse(1.0f, 1.0f, 1.0f, 1.0f);
+	shader.SetVec4("ambientColor", ambient);
+	shader.SetVec4("diffuseColor", diffuse);
+	GameObject light(glm::vec3(5, 0, 0));
+
+	GameObject cube1(glm::vec3(5, 0, 0));
+	GameObject cube2(glm::vec3(0, 5, 0));
+	GameObject cube3(glm::vec3(0, 0, 5));
+
+	light.AddChild(&cube1);
+	cube1.AddChild(&cube2);
+	cube2.AddChild(&cube3);
+
 	MeshRenderer renderer3D = MeshRenderer(VertexData::GetPrefab(VD_SUZANNE), &shader);
 	renderer3D.setTexture("Assets/debug.jpeg");
-	GameObject box = GameObject(glm::vec3(0, 0, 0));
+
+	GameObject monke(glm::vec3(0, 0, 0), &renderer3D);
 
 	mainCamera.projectionView = glm::perspective((float)glm::radians(45.0), (float)width / (float)height, 0.1f, 100.0f);
 	glm::mat4 cameraTransform;
@@ -70,15 +85,31 @@ int main()
 		Time::Update();
 		processInput(window);
 
+		light.transform[3][0] = cos(Time::time) * 5;
+		light.transform[3][2] = sin(Time::time) * 5;
+		light.transform = glm::rotate(light.transform, Time::deltaTime, glm::vec3(0, 1, 0));
+		cube1.transform = glm::rotate(cube1.transform, Time::deltaTime*2, glm::vec3(0, 0, 1));
+		cube2.transform = glm::rotate(cube2.transform, Time::deltaTime*3, glm::vec3(1, 0, 0));
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//box.Render();
 		//renderer2D.Render();
-		renderer3D.Render();
+		shader.Use();
+		glm::vec3 lightPos = light.getPos();
+		shader.SetVec3("lightPos", lightPos);
+		shader.SetVec3("viewPos", mainCamera.Position);
+		monke.Render();
+		light.Render();
+
+		//cube1.Render();
+		//cube2.Render();
+		//cube3.Render();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
+
+		//std::cout << Time::GetFPS() << '\n';
 	}
 	glfwTerminate();
 	return 0;

@@ -34,9 +34,11 @@ void Texture2D::Load(const char* name) {
 }
 void Texture2D::Bind()
 {
-	glBindTexture(GL_TEXTURE_2D, texture);
+	if (this != nullptr)
+		glBindTexture(GL_TEXTURE_2D, texture);
 }
 void Texture2D::Unbind()
 {
-	glBindTexture(GL_TEXTURE_2D, NULL);
+	if (this != nullptr)
+		glBindTexture(GL_TEXTURE_2D, NULL);
 }

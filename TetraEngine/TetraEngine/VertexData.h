@@ -16,9 +16,9 @@
 struct Vertex
 {
 	float x, y, z;
-	float r, g, b;
 	float u, v;
-	Vertex(float x, float y, float z, float r, float g, float b, float u, float v) : x(x), y(y), z(z), r(r), g(g), b(b), u(u), v(v)
+	float nx, ny, nz;
+	Vertex(float x, float y, float z, float u, float v, float nx, float ny, float nz) : x(x), y(y), z(z), nx(nx), ny(ny), nz(nz), u(u), v(v)
 	{
 	}
 };

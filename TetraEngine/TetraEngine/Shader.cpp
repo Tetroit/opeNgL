@@ -57,8 +57,8 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
     glGetShaderiv(fragment, GL_COMPILE_STATUS, &success);
     if (!success)
     {
-        glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+        glGetShaderInfoLog(fragment, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     };
 
     // shader Program
@@ -83,7 +83,8 @@ void Shader::Use() {
     glUseProgram(ID);
 }
 
-void Shader::SetBool(const std::string& name, bool value) const {
+void Shader::SetBool(const std::string& name, bool value) const 
+{
     glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
 }
 void Shader::SetInt(const std::string& name, int value) const
@@ -94,10 +95,31 @@ void Shader::SetFloat(const std::string& name, float value) const
 {
     glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 }
-void Shader::SetMat4(const std::string& name, glm::mat4 &value) const
+void Shader::SetMat4(const std::string& name, glm::mat4& value) const
 {
-    unsigned int ploc = glGetUniformLocation(ID, name.c_str());
-    glUniformMatrix4fv(ploc, 1, GL_FALSE, &value[0][0]);
+    unsigned int loc = glGetUniformLocation(ID, name.c_str());
+    glUniformMatrix4fv(loc, 1, GL_FALSE, &value[0][0]);
+}
+void Shader::SetVec3(const std::string& name, glm::vec3& value) const
+{
+    unsigned int loc = glGetUniformLocation(ID, name.c_str());
+    glUniform3fv(loc, 1, &value[0]);
+}
+void Shader::SetVec4(const std::string& name, glm::vec4& value) const
+{
+    unsigned int loc = glGetUniformLocation(ID, name.c_str());
+    glUniform4fv(loc, 1, &value[0]);
+}
+
+void Shader::SetVec3(const std::string& name, float x, float y, float z) const {
+
+    unsigned int loc = glGetUniformLocation(ID, name.c_str());
+    glUniform3f(loc, x, y, z);
+}
+void Shader::SetVec4(const std::string& name, float x, float y, float z, float w) const {
+
+    unsigned int loc = glGetUniformLocation(ID, name.c_str());
+    glUniform4f(loc, x, y, z, w);
 }
 
 void Shader::InitialiseShaders() {

@@ -12,6 +12,7 @@
 class GameObject
 {
 public:
+	static glm::mat4 currentTransform;
 	glm::mat4 transform;
 	GameObject* parent;
 	MeshRenderer* renderer = &MeshRenderer::defaultRenderer;
@@ -21,5 +22,6 @@ public:
 	void AddChild(GameObject* child);
 	void Render();
 	void getGlobalPos();
+	glm::vec3 getPos();
 };
 
