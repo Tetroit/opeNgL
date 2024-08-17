@@ -1,20 +1,15 @@
 #include "GameObject.h"
 
-glm::mat4 GameObject::currentTransform;
+glm::mat4 GameObject::currentTransform = glm::mat4(1);
 extern glm::mat4 transform;
 extern GameObject* parent;
 extern MeshRenderer renderer;
+extern std::vector<GameObject*> children;
+extern std::vector<Behaviour*> scripts;
 
-GameObject::GameObject(glm::vec3 pos)
+GameObject::GameObject(glm::vec3 pos, const std::string name, MeshRenderer* meshRenderer)
 {
-	parent = nullptr;
-	transform = glm::mat4(1);
-	transform[3][0] = pos.x;
-	transform[3][1] = pos.y;
-	transform[3][2] = pos.z;
-}
-GameObject::GameObject(glm::vec3 pos, MeshRenderer* meshRenderer)
-{
+	this->name = name;
 	parent = nullptr;
 	transform = glm::mat4(1);
 	renderer = meshRenderer;
@@ -27,6 +22,12 @@ void GameObject::AddChild (GameObject* child)
 	children.push_back(child);
 	child->parent = this;
 }
+
+void GameObject::AddBehaviour(Behaviour* script) {
+	scripts.push_back(script);
+	script->gameObject = this;
+}
+
 void GameObject::Render()
 {
 	GameObject::currentTransform *= transform;
@@ -35,6 +36,16 @@ void GameObject::Render()
 		go->Render();
 	}
 	GameObject::currentTransform *= glm::inverse(transform);
+}
+void GameObject::Update() {
+	for (int i = 0; i < scripts.size(); i++)
+	{
+		scripts[i]->Update();
+	}
+	for (int i = 0; i < children.size(); i++) 
+	{
+		children[i]->Update();
+	}
 }
 void GameObject::getGlobalPos()
 {
@@ -46,6 +57,7 @@ void GameObject::getGlobalPos()
 		par = par->parent;
 	}
 }
+
 glm::vec3 GameObject::getPos() {
 	return glm::vec3(transform[3][0], transform[3][1], transform[3][2]);
 }

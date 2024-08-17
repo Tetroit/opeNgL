@@ -8,7 +8,9 @@ extern Shader* shader;
 extern Camera* camera;
 
 MeshRenderer::MeshRenderer(std::shared_ptr<VertexData> vd, Shader* sh) : mesh(vd), shader(sh), camera(Camera::main) {
+    texture = nullptr;
 }
+
 void MeshRenderer::Render(glm::mat4 transform) {
 
     //if (texture == nullptr)

@@ -1,4 +1,5 @@
 #include "OBJParser.h"
+#include "Utils.h"
 
 void OBJParser::OBJRead(const char* path, int id) {
     
@@ -22,7 +23,7 @@ void OBJParser::OBJRead(const char* path, int id) {
     while (!stream.eof())
     {
         std::vector<std::string> words;
-        Words(line, words, ' ');
+        Utils::Words(line, words, ' ');
         if (words.size() > 0) {
             if (words[0] == "v") {
                 glm::vec3 pos;
@@ -55,7 +56,7 @@ void OBJParser::OBJRead(const char* path, int id) {
                     for (int i = 1; i < 4; i++)
                     {
                         std::vector<std::string> values;
-                        Words(words[i], values, '/');
+                        Utils::Words(words[i], values, '/');
                         unsigned int posID = std::stoi(values[0]) - 1;
                         unsigned int uvID = std::stoi(values[1]) - 1;
                         unsigned int normalID = std::stoi(values[2]) - 1;
@@ -78,7 +79,7 @@ void OBJParser::OBJRead(const char* path, int id) {
                     for (int i = 1; i < 5; i++)
                     {
                         std::vector<std::string> values;
-                        Words(words[i], values, '/');
+                        Utils::Words(words[i], values, '/');
                         unsigned int posID = std::stoi(values[0]) - 1;
                         unsigned int uvID = std::stoi(values[1]) - 1;
                         unsigned int normalID = std::stoi(values[2]) - 1;
@@ -108,26 +109,3 @@ void OBJParser::OBJRead(const char* path, int id) {
     mesh->Setup();
 }
 
-void OBJParser::Words(std::string line, std::vector<std::string> &res, char separator, bool ignoreEmpty) {
-
-    res.clear();
-    int wordStart = 0;
-    for (int i = 0; i < line.size(); i++)
-    {
-        if (line[i] == separator)
-        {
-            if (wordStart != i || !ignoreEmpty)
-            {
-                std::string word = line.substr(wordStart, i - wordStart);
-                res.push_back(word);
-                wordStart = i+1;
-            }
-        }
-    }
-    if (wordStart < line.size())
-    {
-        std::string word = line.substr(wordStart, line.size() - wordStart);
-        res.push_back(word);
-    }
-
-}

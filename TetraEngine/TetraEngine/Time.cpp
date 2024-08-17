@@ -4,15 +4,11 @@
 float Time::time = 0;
 float Time::prevTime = 0;
 float Time::deltaTime;
+float Time::fps = 0;
 void Time::Update()
 {
 	prevTime = time;
 	time = glfwGetTime();
 	deltaTime = time - prevTime;
-}
-float Time::GetFPS() {
-	if (deltaTime > 0)
-		return 1 / deltaTime;
-	else
-		return 0;
+	fps = (fps + 3 / deltaTime) / 4;
 }

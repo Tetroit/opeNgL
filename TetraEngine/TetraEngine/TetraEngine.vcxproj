@@ -108,6 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -132,10 +133,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Behaviour.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
-    <ClCompile Include="OBJParser.cpp" />
+    <ClCompile Include="OBJParser.cpp">
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="TetraEngine.cpp" />
@@ -144,14 +149,19 @@
     <ClCompile Include="VertexData.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Behaviour.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ConsoleManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="MeshRenderer.h" />
     <ClInclude Include="OBJParser.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="TestBehaviour.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="Time.h" />
+    <ClInclude Include="Utils.h" />
     <ClInclude Include="VertexData.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

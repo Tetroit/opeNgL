@@ -6,11 +6,16 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
+#include <thread>
 #include "Time.h"
-#include "GameObject.h"
+#include "Scene.h"
+#include "ConsoleManager.h"
+#include "TestBehaviour.h"
 
 extern void processInput(GLFWwindow* window);
 extern void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
+extern void consoleCallback();
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
@@ -21,18 +26,21 @@ void InitialisePresets()
 	VertexData::InitialisePrefabs();
 	MeshRenderer::InitialiseRenderer();
 }
+
 Camera mainCamera = Camera(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 float lastMouseX, lastMouseY;
+GLFWwindow* window;
 
 int main()
 {
+Zc:__cplusplus;
 	static unsigned int width = 1920;
 	static unsigned int height = 1080;
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	GLFWwindow* window = glfwCreateWindow(1920, 1080, "some random shit idk", NULL, NULL);
+	window = glfwCreateWindow(1920, 1080, "some random shit idk", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -44,7 +52,7 @@ int main()
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	glfwMakeContextCurrent(window);
-
+	ConsoleManager::Initialize(window);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -54,7 +62,6 @@ int main()
 
 	glEnable(GL_DEPTH_TEST);
 	InitialisePresets();
-	GameObject::currentTransform = glm::mat4(1);
 
 	Shader shader = Shader("shaders/lit.glvs", "shaders/lit.glfs");
 	shader.Use();
@@ -62,11 +69,11 @@ int main()
 	glm::vec4 diffuse(1.0f, 1.0f, 1.0f, 1.0f);
 	shader.SetVec4("ambientColor", ambient);
 	shader.SetVec4("diffuseColor", diffuse);
-	GameObject light(glm::vec3(5, 0, 0));
 
-	GameObject cube1(glm::vec3(5, 0, 0));
-	GameObject cube2(glm::vec3(0, 5, 0));
-	GameObject cube3(glm::vec3(0, 0, 5));
+	GameObject light(glm::vec3(5, 0, 0), "square1");
+	GameObject cube1(glm::vec3(5, 0, 0), "square2");
+	GameObject cube2(glm::vec3(0, 5, 0), "square3");
+	GameObject cube3(glm::vec3(0, 0, 5), "square4");
 
 	light.AddChild(&cube1);
 	cube1.AddChild(&cube2);
@@ -75,21 +82,36 @@ int main()
 	MeshRenderer renderer3D = MeshRenderer(VertexData::GetPrefab(VD_SUZANNE), &shader);
 	renderer3D.setTexture("Assets/debug.jpeg");
 
-	GameObject monke(glm::vec3(0, 0, 0), &renderer3D);
+	GameObject monke(glm::vec3(0, 0, 0), "monke", &renderer3D);
+	TestBehaviour script;
+	monke.AddBehaviour(&script);
+
+	Scene myScene;
+
+	myScene.AddObject(&monke);
+	myScene.AddObject(&light);
+	//myScene.AddObject(&cube1);
+	//myScene.AddObject(&cube2);
+	//myScene.AddObject(&cube3);
 
 	mainCamera.projectionView = glm::perspective((float)glm::radians(45.0), (float)width / (float)height, 0.1f, 100.0f);
 	glm::mat4 cameraTransform;
+
+	std::thread consoleThread(consoleCallback);
 
 	while (!glfwWindowShouldClose(window))
 	{
 		Time::Update();
 		processInput(window);
 
+		Scene::currentScene->Update();
 		light.transform[3][0] = cos(Time::time) * 5;
 		light.transform[3][2] = sin(Time::time) * 5;
 		light.transform = glm::rotate(light.transform, Time::deltaTime, glm::vec3(0, 1, 0));
 		cube1.transform = glm::rotate(cube1.transform, Time::deltaTime*2, glm::vec3(0, 0, 1));
 		cube2.transform = glm::rotate(cube2.transform, Time::deltaTime*3, glm::vec3(1, 0, 0));
+
+
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -99,8 +121,9 @@ int main()
 		glm::vec3 lightPos = light.getPos();
 		shader.SetVec3("lightPos", lightPos);
 		shader.SetVec3("viewPos", mainCamera.Position);
-		monke.Render();
-		light.Render();
+
+		Scene::currentScene->Render();
+		
 
 		//cube1.Render();
 		//cube2.Render();
@@ -108,11 +131,22 @@ int main()
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
-
-		//std::cout << Time::GetFPS() << '\n';
 	}
+	
+	consoleThread.detach();
+	consoleThread.~thread();
 	glfwTerminate();
 	return 0;
+}
+
+void consoleCallback() {
+
+	std::string command;
+	while (!glfwWindowShouldClose(window))
+	{
+		std::getline(std::cin, command);
+		ConsoleManager::ParseCommand(command);
+	}
 }
 
 void processInput(GLFWwindow* window)
