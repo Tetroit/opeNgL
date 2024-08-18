@@ -75,20 +75,20 @@ Zc:__cplusplus;
 	GameObject cube2(glm::vec3(0, 5, 0), "square3");
 	GameObject cube3(glm::vec3(0, 0, 5), "square4");
 
-	light.AddChild(&cube1);
-	cube1.AddChild(&cube2);
-	cube2.AddChild(&cube3);
+	//light.AddChild(&cube1);
+	//cube1.AddChild(&cube2);
+	//cube2.AddChild(&cube3);
 
 	OBJParser::OBJRead("Assets/meshes/materials.obj");
 
-	MeshRenderer renderer3D = MeshRenderer(VertexData::GetPrefab(3), &shader);
-	renderer3D.setTexture("Assets/debug.jpeg");
+	MeshRenderer renderer3D = MeshRenderer(VertexData::GetPrefab(4), &shader);
+	//renderer3D.setTexture("Assets/debug.jpeg");
 
 	GameObject monke(glm::vec3(0, 0, 0), "monke", &renderer3D);
 
 	TestBehaviour script;
 	monke.AddBehaviour(&script);
-
+	monke.transform = glm::rotate(monke.transform, 3.14f, glm::vec3(0, 1, 0));
 	Scene myScene;
 
 	myScene.AddObject(&monke);
@@ -108,11 +108,11 @@ Zc:__cplusplus;
 		processInput(window);
 
 		Scene::currentScene->Update();
-		light.transform[3][0] = cos(Time::time) * 5;
-		light.transform[3][2] = sin(Time::time) * 5;
-		light.transform = glm::rotate(light.transform, Time::deltaTime, glm::vec3(0, 1, 0));
-		cube1.transform = glm::rotate(cube1.transform, Time::deltaTime*2, glm::vec3(0, 0, 1));
-		cube2.transform = glm::rotate(cube2.transform, Time::deltaTime*3, glm::vec3(1, 0, 0));
+		light.transform[3][0] = cos(Time::time * 0.5f) * 5;
+		light.transform[3][2] = sin(Time::time * 0.5f) * 5;
+		//light.transform = glm::rotate(light.transform, Time::deltaTime, glm::vec3(0, 1, 0));
+		//cube1.transform = glm::rotate(cube1.transform, Time::deltaTime*2, glm::vec3(0, 0, 1));
+		//cube2.transform = glm::rotate(cube2.transform, Time::deltaTime*3, glm::vec3(1, 0, 0));
 
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -122,6 +122,7 @@ Zc:__cplusplus;
 		//renderer2D.Render();
 		shader.Use();
 		glm::vec3 lightPos = light.getPos();
+		std::cout << lightPos.x << ' ' << lightPos.y << ' ' << lightPos.z << '\n';
 		shader.SetVec3("lightPos", lightPos);
 		shader.SetVec3("viewPos", mainCamera.Position);
 

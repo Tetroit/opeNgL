@@ -7,19 +7,15 @@ layout (location = 2) in vec3 aNormal;
 out vec3 pos;
 out vec3 normal;
 out vec2 texCoord;
-out vec3 LightPos;
 
 uniform mat4 transform = mat4(1);
 uniform mat4 projection = mat4(1);
 uniform mat4 view = mat4(1);
-uniform vec3 lightPos = vec3(0,0,0);
 
 void main()
 {
 	pos = (transform * vec4(aPos,1.0)).xyz;
-	normal = aNormal;
+	normal = mat3(transpose(inverse(transform))) * aNormal;  
 	texCoord = UVs;
-	LightPos = lightPos;
-	//LightPos = (transform * vec4(lightPos, 1.0)).xyz;
     gl_Position = projection * view * transform * vec4(aPos, 1.0);
 }

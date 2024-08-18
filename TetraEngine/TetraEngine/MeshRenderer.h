@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include "VertexData.h"
 #include "Camera.h"
+#include "Material.h"
 
 class MeshRenderer
 {
@@ -14,6 +15,7 @@ public:
 	Texture2D* texture;
 	Shader* shader;
 	Camera* camera;
+	Material* material;
 	void Render(glm::mat4 transform = glm::mat4(1));
 	MeshRenderer(std::shared_ptr<VertexData> vd, Shader* sh);
 	void setTexture(Texture2D* texture);

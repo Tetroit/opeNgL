@@ -7,6 +7,6 @@ class TestBehaviour : public Behaviour {
 public:
 	void Update() 
 	{
-		gameObject->transform = glm::rotate(gameObject->transform, Time::deltaTime, glm::vec3(0.1f, 0.2f, 0.3f));
+		gameObject->transform = glm::rotate(gameObject->transform, Time::deltaTime*0.1f, glm::vec3(0.1f, 0.2f, 0.3f));
 	}
 };
