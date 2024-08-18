@@ -7,6 +7,8 @@
 
 std::vector<std::shared_ptr<VertexData>> VertexData::collection = std::vector<std::shared_ptr<VertexData>>{};
 
+int VertexData::lastId = 0;
+
 extern std::vector<Vertex> verts;
 extern std::vector<unsigned int> faces;
 extern float* vert;
@@ -20,18 +22,11 @@ VertexData::VertexData(int id) : id(id)
     verts = {};
     faces = {};
 }
-std::shared_ptr<VertexData> VertexData::CreateVertexData(int id)
+std::shared_ptr<VertexData> VertexData::CreateVertexData()
 {
+    int id = lastId++;
     std::shared_ptr<VertexData> vd = std::make_shared<VertexData>(id);
-    if (id >= collection.size() || id < 0)
-    {
-        id = collection.size();
-        collection.push_back(std::move(vd));
-    }
-    else
-    {
-        collection.insert(collection.begin() + id, std::move(vd));
-    }
+    collection.push_back(std::move(vd));
     return collection[id];
 }
 void VertexData::Setup() {
@@ -105,7 +100,7 @@ void VertexData::LoadFaces(unsigned int* ptr, int size)
 }
 void VertexData::InitialisePrefabs() {
 
-    std::shared_ptr<VertexData> rect = VertexData::CreateVertexData(0);
+    std::shared_ptr<VertexData> rect = VertexData::CreateVertexData();
     std::vector<Vertex> vertices = {
         Vertex(-0.5f, -0.5f, 0.0f, /*uv*/ 0.0f, 0.0f, /*color*/ 1.0f, 1.0f, 1.0f),
         Vertex(0.5f, -0.5f, 0.0f, /*uv*/ 1.0f, 0.0f, /*color*/ 1.0f, 1.0f, 1.0f),
@@ -124,7 +119,7 @@ void VertexData::InitialisePrefabs() {
     vertices.clear();
     index.clear();
 
-    std::shared_ptr<VertexData> cube = VertexData::CreateVertexData(1);
+    std::shared_ptr<VertexData> cube = VertexData::CreateVertexData();
     vertices.insert(vertices.end(), {
 
         Vertex(-0.5f, -0.5f, 0.5f,/*uv*/ 0.0f, 0.0f,/*color*/ 1.0f, 1.0f, 1.0f),
@@ -180,7 +175,7 @@ void VertexData::InitialisePrefabs() {
     vertices.clear();
     index.clear();
 
-    OBJParser::OBJRead("Assets/meshes/suzanne.obj", 2);
+    OBJParser::OBJRead("Assets/meshes/suzanne.obj");
 }
 std::shared_ptr<VertexData> VertexData::GetPrefab(int id) {
     return collection[id];

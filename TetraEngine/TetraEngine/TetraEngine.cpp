@@ -79,10 +79,13 @@ Zc:__cplusplus;
 	cube1.AddChild(&cube2);
 	cube2.AddChild(&cube3);
 
-	MeshRenderer renderer3D = MeshRenderer(VertexData::GetPrefab(VD_SUZANNE), &shader);
+	OBJParser::OBJRead("Assets/meshes/materials.obj");
+
+	MeshRenderer renderer3D = MeshRenderer(VertexData::GetPrefab(3), &shader);
 	renderer3D.setTexture("Assets/debug.jpeg");
 
 	GameObject monke(glm::vec3(0, 0, 0), "monke", &renderer3D);
+
 	TestBehaviour script;
 	monke.AddBehaviour(&script);
 

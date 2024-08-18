@@ -26,10 +26,11 @@ struct Vertex
 class VertexData
 {
 	public:
+		static int lastId;
 		static std::vector<std::shared_ptr<VertexData>> collection;
 		static void InitialisePrefabs();
 		static std::shared_ptr<VertexData> GetPrefab(int id);
-		static std::shared_ptr<VertexData> CreateVertexData(int id);
+		static std::shared_ptr<VertexData> CreateVertexData();
 
 		int id;
 		std::vector<Vertex> verts;

@@ -1,14 +1,17 @@
 #include "OBJParser.h"
 #include "Utils.h"
 
-void OBJParser::OBJRead(const char* path, int id) {
+std::ifstream OBJParser::stream;
+
+void OBJParser::OBJRead(const char* path) {
     
-    std::ifstream stream(path);
+    stream = std::ifstream(path);
     if (!stream.good())
         std::cout << "file couldnt open";
 
+    int vertIDUV = 0;
+
     std::string line;
-    char init[128];
 
     std::vector<glm::vec3> coords;
     std::vector<glm::vec2> uvs;
@@ -17,14 +20,26 @@ void OBJParser::OBJRead(const char* path, int id) {
     std::vector<Vertex> verts;
     std::vector<unsigned int> faces;
 
-    int vertIDUV = 0;
+    std::shared_ptr<VertexData> mesh = nullptr;
 
-    std::getline(stream, line);
     while (!stream.eof())
     {
+        std::getline(stream, line);
         std::vector<std::string> words;
         Utils::Words(line, words, ' ');
         if (words.size() > 0) {
+
+            if (words[0] == "o") {
+                if (mesh != nullptr) {
+                    mesh->LoadVerts(&verts[0], verts.size());
+                    mesh->LoadFaces(&faces[0], faces.size());
+                    mesh->Setup();
+                }
+                mesh = VertexData::CreateVertexData();
+                verts.clear();
+                faces.clear();
+
+            }
             if (words[0] == "v") {
                 glm::vec3 pos;
                 pos.x = std::stof(words[1]);
@@ -100,12 +115,10 @@ void OBJParser::OBJRead(const char* path, int id) {
                 }
             }
         }
-        std::getline(stream, line);
     }
-
-    std::shared_ptr<VertexData> mesh = VertexData::CreateVertexData(id);
-    mesh->LoadVerts(&verts[0], verts.size());
-    mesh->LoadFaces(&faces[0], faces.size());
-    mesh->Setup();
+    if (mesh != nullptr) {
+        mesh->LoadVerts(&verts[0], verts.size());
+        mesh->LoadFaces(&faces[0], faces.size());
+        mesh->Setup();
+    }
 }
-

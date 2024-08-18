@@ -10,8 +10,10 @@
 
 static class OBJParser
 {
+private:
+	static std::ifstream stream;
 
 public:
-	static void OBJRead(const char* path, int id);
+	static void OBJRead(const char* path);
 };
 
