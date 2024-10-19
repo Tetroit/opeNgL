@@ -73,6 +73,8 @@ public:
     void ProcessMouseScroll(float yoffset);
 
     void SetProjection(glm::mat4 proj);
+
+    void SetProjection(float fovy, float ratio, float nearPlane, float farPlane);
 private:
     // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors();

@@ -52,3 +52,16 @@ public:
         return res;
     }
 };
+
+struct Flags {
+private:
+    int value;
+public:
+    bool getFlag(const short id) {
+        return (1 << id) & value;
+    }
+    void setFlag(const short id, const bool state)
+    {
+        value = (state) ? ((1 << id) | value) : (~(1 << id) & value);
+    }
+};

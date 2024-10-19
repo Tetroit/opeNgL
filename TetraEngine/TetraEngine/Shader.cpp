@@ -2,6 +2,9 @@
 #include "Shader.h"
 
 Shader* Shader::billboardShader = nullptr;
+Shader* Shader::skyboxShader = nullptr;
+Shader* Shader::skysphereShader = nullptr;
+
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
 	std::string vertexCode;
@@ -100,7 +103,7 @@ void Shader::SetMat4(const std::string& name, glm::mat4& value) const
     unsigned int loc = glGetUniformLocation(ID, name.c_str());
     glUniformMatrix4fv(loc, 1, GL_FALSE, &value[0][0]);
 }
-void Shader::SetVec3(const std::string& name, glm::vec3& value) const
+void Shader::SetVec3(const std::string& name, const glm::vec3& value) const
 {
     unsigned int loc = glGetUniformLocation(ID, name.c_str());
     glUniform3fv(loc, 1, &value[0]);
@@ -124,4 +127,6 @@ void Shader::SetVec4(const std::string& name, float x, float y, float z, float w
 
 void Shader::InitialiseShaders() {
     billboardShader = new Shader("shaders/billboard.glvs", "shaders/billboard.glfs");
+    skyboxShader = new Shader("shaders/skybox.glvs", "shaders/skybox.glfs");
+    skysphereShader = new Shader("shaders/skysphere.glvs", "shaders/skysphere.glfs");
 }

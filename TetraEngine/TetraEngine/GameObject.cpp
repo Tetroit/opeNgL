@@ -1,21 +1,21 @@
 #include "GameObject.h"
+#include "Scene.h"
 
 glm::mat4 GameObject::currentTransform = glm::mat4(1);
-extern glm::mat4 transform;
-extern GameObject* parent;
-extern MeshRenderer renderer;
-extern std::vector<GameObject*> children;
-extern std::vector<Behaviour*> scripts;
 
 GameObject::GameObject(glm::vec3 pos, const std::string name, MeshRenderer* meshRenderer)
 {
 	this->name = name;
 	parent = nullptr;
+	scene = nullptr;
 	transform = glm::mat4(1);
 	renderer = meshRenderer;
 	transform[3][0] = pos.x;
 	transform[3][1] = pos.y;
 	transform[3][2] = pos.z;
+}
+GameObject::~GameObject() {
+	std::cout << name << " destroyed\n";
 }
 void GameObject::AddChild (GameObject* child)
 {
@@ -23,6 +23,10 @@ void GameObject::AddChild (GameObject* child)
 	child->parent = this;
 }
 
+GameObject* GameObject::Create(glm::vec3 pos, const std::string name, MeshRenderer* meshRenderer) {
+	GameObject* ptr = new GameObject(pos, name, meshRenderer);
+	return ptr;
+}
 void GameObject::AddBehaviour(Behaviour* script) {
 	scripts.push_back(script);
 	script->gameObject = this;
@@ -46,6 +50,14 @@ void GameObject::Update() {
 	{
 		children[i]->Update();
 	}
+}
+void GameObject::OnSceneAdded(Scene* scene)
+{
+	std::cout << "Object added to scene\n";
+}
+void GameObject::OnSceneRemoved()
+{
+	std::cout << "Object removed from scene\n";
 }
 void GameObject::getGlobalPos()
 {

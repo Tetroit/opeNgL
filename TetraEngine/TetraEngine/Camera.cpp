@@ -94,6 +94,9 @@ void Camera::ProcessMouseScroll(float yoffset)
 void Camera::SetProjection(glm::mat4 proj) {
     projectionView = proj;
 }
+void Camera::SetProjection(float fovy, float ratio, float nearPlane, float farPlane) {
+    projectionView = glm::perspective(fovy, ratio, nearPlane, farPlane);
+}
 void Camera::updateCameraVectors()
 {
     // calculate the new Front vector

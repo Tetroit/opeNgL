@@ -1,4 +1,4 @@
-#version 330 core
+#version 460 core
 
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 UVs;
@@ -8,6 +8,7 @@ out vec3 pos;
 out vec3 normal;
 out vec2 texCoord;
 
+uniform bool FuNkY = false;
 uniform mat4 transform = mat4(1);
 uniform mat4 projection = mat4(1);
 uniform mat4 view = mat4(1);
@@ -17,5 +18,16 @@ void main()
 	pos = (transform * vec4(aPos,1.0)).xyz;
 	normal = mat3(transpose(inverse(transform))) * aNormal;  
 	texCoord = UVs;
-    gl_Position = projection * view * transform * vec4(aPos, 1.0);
+	vec4 glPos = projection * view * transform * vec4(aPos, 1.0);
+	
+	if (FuNkY) {
+		float fac = (glPos.z/glPos.w+1)/2;
+		fac = 2/(1-fac) / 10;
+		float fac1 = (sin(fac));
+		fac = (cos(fac));
+		//fac = 1-2/fac;
+		glPos.x += fac/glPos.w;
+		glPos.y += fac1/glPos.w;
+	}
+	gl_Position = glPos;
 }

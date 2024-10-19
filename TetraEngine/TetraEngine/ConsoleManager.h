@@ -10,6 +10,7 @@
 
 #include "Utils.h"
 #include "Scene.h"
+#include "DestroyManager.h"
 
 static class ConsoleManager {
 	
@@ -27,12 +28,14 @@ private:
 
 	static enum Command
 	{
+		UNKNOWN,
 		G_Quit,
 		G_FPS,
 		G_Tree,
 		G_GameObject,
 		GO_Transform,
 		GO_Parent,
+		GO_Destroy
 	};
 	static enum Type
 	{
@@ -47,6 +50,8 @@ private:
 		if (str == "gameobject" || str == "go") return G_GameObject;
 		if (str == "transform" || str == "t") return GO_Transform;
 		if (str == "parent" || str == "p") return GO_Parent;
+		if (str == "destroy" || str == "d") return GO_Destroy;
+		return UNKNOWN;
 	}
 
 	static void* context;
@@ -127,13 +132,13 @@ public:
 
 		{
 			SetConsoleTextAttribute(console, 10);
-			std::cout << "scene\n";
-			std::string prefix = "";
 			Scene* scene = Scene::currentScene;
+			std::cout << "scene (" << scene->objects.size() << ")\n";
+			std::string prefix = "";
 			for (int i = 0; i < scene->objects.size(); i++)
 			{
 				if (scene->objects[i]->parent == NULL)
-					WriteObject(scene->objects[i], "`-->");
+					WriteObject(scene->objects[i].get(), "`-->");
 
 			}
 
@@ -156,7 +161,7 @@ public:
 
 			for (int i = 0; i < scene->objects.size(); i++)
 			{
-				gameobject = scene->objects[i];
+				gameobject = scene->objects[i].get();
 				queue.push(gameobject);
 			}
 			while (queue.size() > 0) {
@@ -169,7 +174,7 @@ public:
 					std::cout << "Selected object '" << gameobject->name << "'";
 					found = true;
 
-					context = gameobject;
+					context = static_cast<void*>(gameobject);
 					contextType = T_GameObject;
 					break;
 				}
@@ -220,6 +225,22 @@ public:
 			if (size > 1 && ((*args)[1] == "s" || (*args)[1] == "select")) {
 				context = gameObject->parent;
 			}
+
+			break;
+		}
+		case GO_Destroy:
+		{
+			if (contextType != T_GameObject) {
+
+				SetConsoleTextAttribute(console, 12);
+				std::cout << "No GameObject selected";
+				break;
+			}
+			auto gameObject = static_cast<GameObject*>(context);
+			DestroyManager::get()->push(gameObject);
+
+			context = nullptr;
+			contextType = T_Null;
 
 			break;
 		}

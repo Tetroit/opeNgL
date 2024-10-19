@@ -1,11 +1,6 @@
 #include "Texture2D.h"
 #include <iostream>
 
-#ifndef STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-#endif
-
 extern unsigned char* data;
 extern unsigned int texture;
 extern int width;
@@ -31,14 +26,25 @@ void Texture2D::Load(const char* name) {
 	{
 		std::cout << "Failed to load texture" << std::endl;
 	}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
-void Texture2D::Bind()
+void Texture2D::Bind(int id)
 {
 	if (this != nullptr)
+	{
+		glActiveTexture(GL_TEXTURE0 + id);
 		glBindTexture(GL_TEXTURE_2D, texture);
+	}
 }
-void Texture2D::Unbind()
+void Texture2D::Unbind(int id)
 {
 	if (this != nullptr)
+	{
+		glActiveTexture(GL_TEXTURE0 + id);
 		glBindTexture(GL_TEXTURE_2D, NULL);
+	}
 }

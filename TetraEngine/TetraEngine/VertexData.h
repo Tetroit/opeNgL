@@ -8,6 +8,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
+#include <map>
+#include "Material.h"
 
 #define VD_RECTANGLE 0
 #define VD_CUBE 1
@@ -33,6 +35,7 @@ class VertexData
 		static std::shared_ptr<VertexData> CreateVertexData();
 
 		int id;
+		std::vector<int> materialMap;
 		std::vector<Vertex> verts;
 		std::vector<unsigned int> faces;
 		float* vert;
