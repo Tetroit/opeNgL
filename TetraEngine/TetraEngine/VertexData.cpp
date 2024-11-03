@@ -5,6 +5,12 @@
 
 #include "VertexData.h"
 
+/*
+* 1.Constructor
+* 2.LoadVerts
+* 3.LoadFaces
+* 4.Setup
+*/
 std::vector<std::shared_ptr<VertexData>> VertexData::collection = std::vector<std::shared_ptr<VertexData>>{};
 
 int VertexData::lastId = 0;
@@ -104,10 +110,10 @@ void VertexData::InitialisePrefabs() {
 
     std::shared_ptr<VertexData> rect = VertexData::CreateVertexData();
     std::vector<Vertex> vertices = {
-        Vertex(-1.0f, -1.0f, 0.0f, /*uv*/ 0.0f, 0.0f, /*color*/ 0.0f, 0.0f, 1.0f),
-        Vertex(1.0f, -1.0f, 0.0f, /*uv*/ 1.0f, 0.0f, /*color*/ 0.0f, 0.0f, 1.0f),
-        Vertex(-1.0f,  1.0f, 0.0f, /*uv*/ 0.0f, 1.0f,/*color*/ 0.0f, 0.0f, 1.0f),
-        Vertex(1.0f,  1.0f, 0.0f, /*uv*/ 1.0f, 1.0f, /*color*/ 0.0f, 0.0f, 1.0f),
+        Vertex(-1.0f, -1.0f, 0.0f, /*uv*/ 0.0f, 0.0f, /*normal*/ 0.0f, 0.0f, 1.0f),
+        Vertex(1.0f, -1.0f, 0.0f, /*uv*/ 1.0f, 0.0f, /*normal*/ 0.0f, 0.0f, 1.0f),
+        Vertex(-1.0f,  1.0f, 0.0f, /*uv*/ 0.0f, 1.0f,/*normal*/ 0.0f, 0.0f, 1.0f),
+        Vertex(1.0f,  1.0f, 0.0f, /*uv*/ 1.0f, 1.0f, /*normal*/ 0.0f, 0.0f, 1.0f),
     };
     std::vector<unsigned int> index = {
         0, 1, 2,
@@ -124,35 +130,35 @@ void VertexData::InitialisePrefabs() {
     std::shared_ptr<VertexData> cube = VertexData::CreateVertexData();
     vertices.insert(vertices.end(), {
 
-        Vertex(-0.5f, -0.5f, 0.5f,/*uv*/ 0.0f, 0.0f,/*color*/ 0.0f, 0.0f, 1.0f),
-        Vertex(0.5f, -0.5f, 0.5f, /*uv*/ 1.0f, 0.0f, /*color*/ 0.0f, 0.0f, 1.0f),
-        Vertex(-0.5f,  0.5f, 0.5f, /*uv*/ 0.0f, 1.0f,/*color*/ 0.0f, 0.0f, 1.0f),
-        Vertex(0.5f,  0.5f, 0.5f, /*uv*/ 1.0f, 1.0f, /*color*/ 0.0f, 0.0f, 1.0f),
+        Vertex(-0.5f, -0.5f, 0.5f,/*uv*/ 0.0f, 0.0f,/*normal*/ 0.0f, 0.0f, 1.0f),
+        Vertex(0.5f, -0.5f, 0.5f, /*uv*/ 1.0f, 0.0f, /*normal*/ 0.0f, 0.0f, 1.0f),
+        Vertex(-0.5f,  0.5f, 0.5f, /*uv*/ 0.0f, 1.0f,/*normal*/ 0.0f, 0.0f, 1.0f),
+        Vertex(0.5f,  0.5f, 0.5f, /*uv*/ 1.0f, 1.0f, /*normal*/ 0.0f, 0.0f, 1.0f),
 
-        Vertex(-0.5f, -0.5f, -0.5f, /*uv*/ 0.0f, 0.0f,/*color*/ 0.0f, 0.0f, -1.0f),
-        Vertex(0.5f, -0.5f, -0.5f, /*uv*/ 1.0f, 0.0f, /*color*/ 0.0f, 0.0f, -1.0f),
-        Vertex(-0.5f,  0.5f, -0.5f, /*uv*/ 0.0f, 1.0f,/*color*/ 0.0f, 0.0f, -1.0f),
-        Vertex(0.5f,  0.5f, -0.5f, /*uv*/ 1.0f, 1.0f, /*color*/ 0.0f, 0.0f, -1.0f),
+        Vertex(-0.5f, -0.5f, -0.5f, /*uv*/ 0.0f, 0.0f,/*normal*/ 0.0f, 0.0f, -1.0f),
+        Vertex(0.5f, -0.5f, -0.5f, /*uv*/ 1.0f, 0.0f, /*normal*/ 0.0f, 0.0f, -1.0f),
+        Vertex(-0.5f,  0.5f, -0.5f, /*uv*/ 0.0f, 1.0f,/*normal*/ 0.0f, 0.0f, -1.0f),
+        Vertex(0.5f,  0.5f, -0.5f, /*uv*/ 1.0f, 1.0f, /*normal*/ 0.0f, 0.0f, -1.0f),
 
-        Vertex(-0.5f, -0.5f, -0.5f, /*uv*/ 0.0f, 0.0f, /*color*/ 0.0f, -1.0f, 0.0f),
-        Vertex(0.5f, -0.5f, -0.5f, /*uv*/ 1.0f, 0.0f, /*color*/ 0.0f, -1.0f, 0.0f),
-        Vertex(-0.5f,  -0.5f, 0.5f, /*uv*/ 0.0f, 1.0f, /*color*/ 0.0f, -1.0f, 0.0f),
-        Vertex(0.5f,  -0.5f, 0.5f, /*uv*/ 1.0f, 1.0f, /*color*/ 0.0f, -1.0f, 0.0f),
+        Vertex(-0.5f, -0.5f, -0.5f, /*uv*/ 0.0f, 0.0f, /*normal*/ 0.0f, -1.0f, 0.0f),
+        Vertex(0.5f, -0.5f, -0.5f, /*uv*/ 1.0f, 0.0f, /*normal*/ 0.0f, -1.0f, 0.0f),
+        Vertex(-0.5f,  -0.5f, 0.5f, /*uv*/ 0.0f, 1.0f, /*normal*/ 0.0f, -1.0f, 0.0f),
+        Vertex(0.5f,  -0.5f, 0.5f, /*uv*/ 1.0f, 1.0f, /*normal*/ 0.0f, -1.0f, 0.0f),
 
-        Vertex(-0.5f, 0.5f, -0.5f, /*uv*/ 0.0f, 0.0f, /*color*/ 0.0f, 1.0f, 0.0f),
-        Vertex(0.5f, 0.5f, -0.5f, /*uv*/ 1.0f, 0.0f, /*color*/ 0.0f, 1.0f, 0.0f),
-        Vertex(-0.5f,  0.5f, 0.5f, /*uv*/ 0.0f, 1.0f, /*color*/ 0.0f, 1.0f, 0.0f),
-        Vertex(0.5f,  0.5f, 0.5f, /*uv*/ 1.0f, 1.0f, /*color*/ 0.0f, 1.0f, 0.0f),
+        Vertex(-0.5f, 0.5f, -0.5f, /*uv*/ 0.0f, 0.0f, /*normal*/ 0.0f, 1.0f, 0.0f),
+        Vertex(0.5f, 0.5f, -0.5f, /*uv*/ 1.0f, 0.0f, /*normal*/ 0.0f, 1.0f, 0.0f),
+        Vertex(-0.5f,  0.5f, 0.5f, /*uv*/ 0.0f, 1.0f, /*normal*/ 0.0f, 1.0f, 0.0f),
+        Vertex(0.5f,  0.5f, 0.5f, /*uv*/ 1.0f, 1.0f, /*normal*/ 0.0f, 1.0f, 0.0f),
 
-        Vertex(-0.5f, -0.5f, -0.5f, /*uv*/ 0.0f, 0.0f,/*color*/ -1.0f, 0.0f, 0.0f),
-        Vertex(-0.5f, 0.5f, -0.5f, /*uv*/ 1.0f, 0.0f, /*color*/ -1.0f, 0.0f, 0.0f),
-        Vertex(-0.5f,  -0.5f, 0.5f, /*uv*/ 0.0f, 1.0f,/*color*/ -1.0f, 0.0f, 0.0f),
-        Vertex(-0.5f,  0.5f, 0.5f, /*uv*/ 1.0f, 1.0f, /*color*/ -1.0f, 0.0f, 0.0f),
+        Vertex(-0.5f, -0.5f, -0.5f, /*uv*/ 0.0f, 0.0f,/*normal*/ -1.0f, 0.0f, 0.0f),
+        Vertex(-0.5f, 0.5f, -0.5f, /*uv*/ 1.0f, 0.0f, /*normal*/ -1.0f, 0.0f, 0.0f),
+        Vertex(-0.5f,  -0.5f, 0.5f, /*uv*/ 0.0f, 1.0f,/*normal*/ -1.0f, 0.0f, 0.0f),
+        Vertex(-0.5f,  0.5f, 0.5f, /*uv*/ 1.0f, 1.0f, /*normal*/ -1.0f, 0.0f, 0.0f),
 
-        Vertex(0.5f, -0.5f, -0.5f, /*uv*/ 0.0f, 0.0f,/*color*/ 1.0f, 0.0f, 0.0f),
-        Vertex(0.5f, 0.5f, -0.5f, /*uv*/ 1.0f, 0.0f, /*color*/ 1.0f, 0.0f, 0.0f),
-        Vertex(0.5f,  -0.5f, 0.5f, /*uv*/ 0.0f, 1.0f,/*color*/ 1.0f, 0.0f, 0.0f),
-        Vertex(0.5f,  0.5f, 0.5f, /*uv*/ 1.0f, 1.0f, /*color*/ 1.0f, 0.0f, 0.0f),
+        Vertex(0.5f, -0.5f, -0.5f, /*uv*/ 0.0f, 0.0f,/*normal*/ 1.0f, 0.0f, 0.0f),
+        Vertex(0.5f, 0.5f, -0.5f, /*uv*/ 1.0f, 0.0f, /*normal*/ 1.0f, 0.0f, 0.0f),
+        Vertex(0.5f,  -0.5f, 0.5f, /*uv*/ 0.0f, 1.0f,/*normal*/ 1.0f, 0.0f, 0.0f),
+        Vertex(0.5f,  0.5f, 0.5f, /*uv*/ 1.0f, 1.0f, /*normal*/ 1.0f, 0.0f, 0.0f),
         });
 
     index.insert(index.end(), {

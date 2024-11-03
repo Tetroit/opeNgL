@@ -17,6 +17,8 @@ class Shader
         static Shader* billboardShader;
         static Shader* skysphereShader;
         static Shader* skyboxShader;
+        static Shader* textShader;
+
 		unsigned int ID;
         Shader(const char* vertexPath, const char* fragmentPath);
         void Use();

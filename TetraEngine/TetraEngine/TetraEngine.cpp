@@ -16,6 +16,7 @@
 #include "Scene.h"
 #include "ConsoleManager.h"
 #include "TestBehaviour.h"
+#include "FreeType.h"
 
 extern void processInput(GLFWwindow* window);
 extern void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
@@ -28,6 +29,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 void InitialisePresets()
 {
+	if (FreeType::Initialise()) std::cout<<"freetype initialised successfully\n";
 	Shader::InitialiseShaders();
 	VertexData::InitialisePrefabs();
 	MeshRenderer::InitialiseRenderer();
@@ -40,6 +42,7 @@ float lastMouseX, lastMouseY;
 bool cursorEnabled;
 GLFWwindow* window;
 ImGuiIO* io;
+
 
 int main()
 {
@@ -80,6 +83,7 @@ int main()
 #endif
 	ImGui_ImplOpenGL3_Init("#version 460");
 
+
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
 		std::cout << "Failed to initialize GLAD" << std::endl;
@@ -90,7 +94,7 @@ int main()
 	InitialisePresets();
 
 	Scene myScene;
-	myScene.skybox = new Skybox(Skybox::BOX, "Assets/skybox");
+	myScene.skybox = new Skybox(Skybox::BOX, "assets/skybox");
 	Skybox::current = myScene.skybox;
 	Shader shader = Shader("shaders/lit.glvs", "shaders/lit.glfs");
 	shader.Use();
@@ -103,8 +107,8 @@ int main()
 	//cube1.AddChild(&cube2);
 	//cube2.AddChild(&cube3);
 
-	OBJParser::OBJRead("Assets/meshes/materials.obj");
-	Material::ParseMTL("Assets/meshes/materials.mtl");
+	OBJParser::OBJRead("assets/meshes/materials.obj");
+	Material::ParseMTL("assets/meshes/materials.mtl");
 
 	MeshRenderer renderer3D = MeshRenderer(VertexData::GetPrefab(VD_SUZANNE), &shader);
 	//renderer3D.setTexture("Assets/debug.jpeg");
@@ -124,7 +128,7 @@ int main()
 	myScene.AddObject(pointLight4);*/
 
 	Texture2D specularTex;
-	specularTex.Load("Assets/container_specular.png");
+	specularTex.Load("assets/container_specular.png");
 
 	monke1->renderer->material = &Material::collection[0];
 	//monke1->renderer->setTexture("Assets/container.png");
@@ -190,6 +194,16 @@ int main()
 		myScene.lightManager.fetchPointLights(&shader);
 
 		Scene::currentScene->Render();
+
+		//glEnable(GL_CULL_FACE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		Shader::textShader->Use();
+		glm::mat4 proj = glm::ortho(0.0f, (float)width, 0.0f, (float)height);
+		Shader::textShader->SetMat4("projection", proj);
+
+		FreeType::RenderText("penis", 50.0f, 500.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

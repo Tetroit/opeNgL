@@ -4,6 +4,7 @@
 Shader* Shader::billboardShader = nullptr;
 Shader* Shader::skyboxShader = nullptr;
 Shader* Shader::skysphereShader = nullptr;
+Shader* Shader::textShader = nullptr;
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
@@ -129,4 +130,5 @@ void Shader::InitialiseShaders() {
     billboardShader = new Shader("shaders/billboard.glvs", "shaders/billboard.glfs");
     skyboxShader = new Shader("shaders/skybox.glvs", "shaders/skybox.glfs");
     skysphereShader = new Shader("shaders/skysphere.glvs", "shaders/skysphere.glfs");
+    textShader = new Shader("shaders/text.glvs", "shaders/text.glfs");
 }

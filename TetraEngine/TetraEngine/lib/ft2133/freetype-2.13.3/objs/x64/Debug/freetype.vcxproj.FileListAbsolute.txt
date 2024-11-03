@@ -1,0 +1,1 @@
+C:\Users\pchyo\Documents\GitHub\opeNgL\TetraEngine\TetraEngine\lib\ft2133\freetype-2.13.3\objs\x64\Debug\freetype.dll
