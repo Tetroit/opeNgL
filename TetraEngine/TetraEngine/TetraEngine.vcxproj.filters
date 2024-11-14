@@ -34,6 +34,12 @@
     <Filter Include="Source Files\extern">
       <UniqueIdentifier>{b51213fb-e02a-451b-b78d-afde6cf9e0a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scripts">
+      <UniqueIdentifier>{36a09adf-4bdf-4014-8a53-b2ecb1c3f0fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripts">
+      <UniqueIdentifier>{9591e407-c77e-41eb-a7a6-46d174d8854c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TetraEngine.cpp">
@@ -121,6 +127,15 @@
       <Filter>Source Files\extern</Filter>
     </ClCompile>
     <ClCompile Include="FreeType.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="InputManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -219,6 +234,15 @@
       <Filter>Header Files\exern</Filter>
     </ClInclude>
     <ClInclude Include="FreeType.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Header Files\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="InputManager.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>

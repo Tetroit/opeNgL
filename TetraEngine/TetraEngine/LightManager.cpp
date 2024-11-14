@@ -11,7 +11,7 @@ void LightManager::fetchPointLights(Shader* shader)
 	shader->SetInt("pointlightsCount", pointLights.size());
 	for (int i = 0; i < pointLights.size(); i++)
 	{
-		shader->SetVec3(std::string("pointLights[" + std::to_string(i) + "].pos"), pointLights[i]->getPos());
+		shader->SetVec3(std::string("pointLights[" + std::to_string(i) + "].pos"), pointLights[i]->GetPos());
 		shader->SetVec3(std::string("pointLights[" + std::to_string(i) + "].ambient"), pointLights[i]->ambient);
 		shader->SetVec3(std::string("pointLights[" + std::to_string(i) + "].diffuse"), pointLights[i]->diffuse);
 		shader->SetVec3(std::string("pointLights[" + std::to_string(i) + "].specular"), pointLights[i]->specular);

@@ -30,7 +30,7 @@ in vec2 texCoord;
 out vec4 FragColor;
 
 uniform Material surface = Material(vec3(1,1,1),vec3(1,1,1),vec3(1,1,1),16);
-uniform DirectionalLight light = DirectionalLight(vec3(0,-1,0),vec3(0,0,0),vec3(0,0,0),vec3(0,0,0));
+uniform DirectionalLight light = DirectionalLight(normalize(vec3(0,1,0)),vec3(0,0,0),vec3(0,0,0),vec3(0,0,0));
 
 uniform int pointlightsCount = 0;
 uniform PointLight pointLights[16];
@@ -44,6 +44,10 @@ uniform samplerCube skyTexture;
 
 uniform vec3 viewPos = vec3(0,0,0);
 
+
+vec3 SoftLight(vec3 a, vec3 b){
+	return (a - 2*b) * a*a + 2 * a * b;
+}
 vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 {
     vec3 lightDir = normalize(light.pos - fragPos);
@@ -71,7 +75,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
 		colorD *= surface.diffuse;
 	}
 	if ((textureFlags & 2) != 0) colorS = texture(textureS, texCoord).xyz * colorS;
-	else colorS *= surface.specular;
+	else colorS *= surface.specular.x;
 	if ((textureFlags & 4) != 0) colorA += texture(textureA, texCoord).xyz;
 	
     colorA  *= attenuation;
@@ -96,15 +100,15 @@ void main()
 	
 	if ((textureFlags & 1) != 0) 
 	{
-		colorA *= texture(textureD, texCoord).xyz;
+		colorA += texture(textureD, texCoord).xyz * surface.ambient;
 		colorD *= texture(textureD, texCoord).xyz;
 	}
 	else {
-		colorA *= surface.ambient;
+		colorA += surface.ambient;
 		colorD *= surface.diffuse;
 	}
-	if ((textureFlags & 2) != 0) colorS = texture(textureS, texCoord).xyz * colorS;
-	else colorS *= surface.specular;
+	if ((textureFlags & 2) != 0) colorS = texture(textureS, texCoord).xxx * colorS;
+	else colorS *= surface.specular.x;
 	if ((textureFlags & 4) != 0) colorA += texture(textureA, texCoord).xyz;
 	
 	
@@ -113,7 +117,7 @@ void main()
 		color += CalcPointLight(pointLights[i], normal, pos, viewDir);
 		
 	if ((textureFlags & 8) != 0)
-		color *= texture(skyTexture, reflect(-viewDir,normal)).xyz;
+		color = SoftLight(color, texture(skyTexture, reflect(-viewDir,normal)).xyz);
 	
 	FragColor = vec4(color, 1);
 } 

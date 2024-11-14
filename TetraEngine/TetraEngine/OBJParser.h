@@ -14,6 +14,6 @@ private:
 	static std::ifstream stream;
 
 public:
-	static void OBJRead(const char* path);
+	static int OBJRead(const char* path);
 };
 

@@ -2,9 +2,23 @@
 
 #include <string>
 #include <vector>
+#include <glm/glm.hpp>
 
 static class Utils {
 public:
+
+    static glm::vec3 Lerp(glm::vec3 a, glm::vec3 b, float fac)
+    {
+        if (fac < 0)
+            fac = 0;
+        if (fac > 1)
+            fac = 1;
+        return a * (1.f - fac) + b * fac;
+    }
+    static float frand()
+    {
+        return (float)rand() / (float)RAND_MAX;
+    }
     static void Words(std::string line, std::vector<std::string>& res, char separator, bool ignoreEmpty = true) {
 
         res.clear();

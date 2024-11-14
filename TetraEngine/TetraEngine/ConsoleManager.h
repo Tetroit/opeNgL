@@ -68,8 +68,8 @@ public:
 	
 	template <typename mat>
 	static void PrintMatrix(mat matrix) {
-		int cols = matrix.length();
-		int rows = matrix[0].length();
+		const int cols = matrix.length();
+		const int rows = matrix[0].length();
 		std::cout << "+-------";
 		for (int j = 0; j < cols; j++) {
 

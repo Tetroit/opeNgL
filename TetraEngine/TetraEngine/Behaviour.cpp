@@ -3,9 +3,13 @@
 
 extern GameObject* gameObject;
 
-Behaviour::Behaviour() {
+Behaviour::Behaviour(std::string tag) : tag(tag) {
 
 }
 void Behaviour::Update() {
 
+}
+
+void Behaviour::Start()
+{
 }
