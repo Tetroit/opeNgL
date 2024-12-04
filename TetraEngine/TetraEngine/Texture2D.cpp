@@ -10,14 +10,16 @@ extern int channels;
 Texture2D::Texture2D() {
 	glGenTextures(1, &texture);
 }
-void Texture2D::Load(const char* name) {
+void Texture2D::Load(const char* name, bool flip_vertically) {
 
 	glBindTexture(GL_TEXTURE_2D, texture);
 
+	stbi_set_flip_vertically_on_load(flip_vertically);
 	data = stbi_load(name, &width, &height, &channels, 0);
 	if (data)
 	{
 		int channelMode = GL_RGB;
+		if (channels == 1) channelMode = GL_RED;
 		if (channels == 4) channelMode = GL_RGBA;
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, channelMode, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);

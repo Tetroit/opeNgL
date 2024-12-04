@@ -16,7 +16,8 @@ uniform mat4 view = mat4(1);
 void main()
 {
 	pos = (transform * vec4(aPos,1.0)).xyz;
-	normal = mat3(transpose(inverse(transform))) * aNormal;  
+	normal = normalize(mat3(transpose(inverse(transform))) * aNormal); 
+	//normal = aNormal;
 	texCoord = UVs;
 	vec4 glPos = projection * view * transform * vec4(aPos, 1.0);
 	

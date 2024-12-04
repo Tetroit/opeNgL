@@ -3,15 +3,6 @@
 MeshRenderer MeshRenderer::defaultRenderer = MeshRenderer(nullptr, nullptr);
 MeshRenderer MeshRenderer::skyboxRenderer = MeshRenderer(nullptr, nullptr);
 
-extern std::shared_ptr<VertexData> mesh;
-extern Texture2D* diffuseTexture = nullptr;
-extern Texture2D* specularTexture = nullptr;
-extern Texture2D* emissionTexture = nullptr;
-
-extern Material* material = nullptr;
-extern Shader* shader;
-extern Camera* camera;
-
 MeshRenderer::MeshRenderer(std::shared_ptr<VertexData> vd, Shader* sh) : mesh(vd), shader(sh), camera(Camera::main), material(Material::defaultMaterial) {
     diffuseTexture = nullptr;
     specularTexture = nullptr;

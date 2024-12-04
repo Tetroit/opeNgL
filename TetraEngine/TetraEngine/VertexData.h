@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
 #include <vector>
 #include <map>
 #include "Material.h"
@@ -33,6 +34,7 @@ class VertexData
 		static void InitialisePrefabs();
 		static std::shared_ptr<VertexData> GetPrefab(int id);
 		static std::shared_ptr<VertexData> CreateVertexData();
+		static std::shared_ptr<VertexData> LoadFromFile(const char* path);
 
 		int id;
 		std::vector<int> materialMap;

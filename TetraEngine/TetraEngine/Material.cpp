@@ -2,6 +2,7 @@
 
 Material* Material::defaultMaterial = nullptr;
 std::vector<Material> Material::collection;
+int Material::lastId = 0;
 
 void Material::Initialize() {
 	collection.push_back(Material("default"));

@@ -12,7 +12,7 @@
 class Material
 {
 private:
-    inline static int lastId = 0;
+    static int lastId;
 
     int id;
 
@@ -29,7 +29,7 @@ public:
     float shininess = 16;
     std::string name;
     Material(std::string name) : name(name) { id = lastId++; }
-    Material(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular) : ambient(ambient), diffuse(diffuse), specular(specular), name(name) { id = lastId++; }
+    Material(glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, std::string name = "material") : ambient(ambient), diffuse(diffuse), specular(specular), name(name) { id = lastId++; }
 };
 
 

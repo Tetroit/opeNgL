@@ -4,10 +4,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/constants.hpp>
+#include <glm/gtc/quaternion.hpp>
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 #include <iostream>
 #include <thread>
@@ -17,6 +19,8 @@
 #include "ConsoleManager.h"
 #include "TestBehaviour.h"
 #include "FreeType.h"
+#include "Bullet.h"
+#include "Enemy.h"
 
 extern void processInput(GLFWwindow* window);
 extern void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
@@ -36,23 +40,40 @@ void InitialisePresets()
 	LightRenderer::InitialiseRenderer();
 	Material::Initialize();
 }
+void Shoot(GameObject* ship, MeshRenderer* bullet, glm::vec3 velocity = glm::vec3(1,0,0), glm::vec3 offset = glm::vec3(0,0,0)) {
+	glm::vec3 pos = ship->TransformPoint(offset);
+	glm::vec3 dir = glm::normalize(ship->TransformDirection(velocity));
+
+	GameObject* instance = new GameObject(pos, "bullet", bullet);
+	Bullet* script = new Bullet();
+	script->velocity = velocity;
+	instance->AddBehaviour(script);
+
+	instance->LocalRotate(glm::rotation(glm::normalize(velocity), dir));
+	instance->LocalScale(glm::vec3(0.4f, 0.04f, 0.04f));
+	instance -> UpdateMatrix();
+
+	std::cout << instance->GetGlobalPos().x << " " << instance->GetGlobalPos().y << " " << instance->GetGlobalPos().z << " " << '\n';
+	ship->scene->AddObject(instance);
+}
 
 Camera mainCamera = Camera(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 float lastMouseX, lastMouseY;
 bool cursorEnabled;
+bool LMBpressed = false;
 GLFWwindow* window;
 ImGuiIO* io;
-
 
 int main()
 {
 	static unsigned int width = 1920;
 	static unsigned int height = 1080;
+	std::srand(time(NULL));
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	window = glfwCreateWindow(1920, 1080, "some random shit idk", NULL, NULL);
+	window = glfwCreateWindow(1920, 1080, "showcase", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -99,73 +120,66 @@ int main()
 	Shader shader = Shader("shaders/lit.glvs", "shaders/lit.glfs");
 	shader.Use();
 
-	//GameObject cube1(glm::vec3(5, 0, 0), "square2");
-	//GameObject cube2(glm::vec3(0, 5, 0), "square3");
-	//GameObject cube3(glm::vec3(0, 0, 5), "square4");
+	std::shared_ptr<VertexData> ship = VertexData::LoadFromFile("assets/meshes/ship.obj");
 
-	//light.AddChild(&cube1);
-	//cube1.AddChild(&cube2);
-	//cube2.AddChild(&cube3);
-
-	OBJParser::OBJRead("assets/meshes/materials.obj");
-	Material::ParseMTL("assets/meshes/materials.mtl");
-
-	MeshRenderer renderer3D = MeshRenderer(VertexData::GetPrefab(VD_SUZANNE), &shader);
-	//renderer3D.setTexture("Assets/debug.jpeg");
-
-	auto monke1 = GameObject::Create(glm::vec3(1, 1, 1), "monke1", &renderer3D);
-	auto monke3 = GameObject::Create(glm::vec3(-1, -1, -3), "monke3", &renderer3D);
-	/*auto pointLight1 = new PointLight(glm::vec3(2, 0, 0), "pl");
-	auto pointLight2 = new PointLight(glm::vec3(0, 0, 2), "pl");
-	auto pointLight3 = new PointLight(glm::vec3(-2, 0, 0), "pl");
-	auto pointLight4 = new PointLight(glm::vec3(0, 0, -2), "pl");*/
-
-	myScene.AddObject(monke1);
-	myScene.AddObject(monke3);
-	/*myScene.AddObject(pointLight1);
-	myScene.AddObject(pointLight2);
-	myScene.AddObject(pointLight3);
-	myScene.AddObject(pointLight4);*/
+	MeshRenderer shipRenderer(ship, &shader);
+	PointLight* light1 = new PointLight(glm::vec3(0, 0, 5), "l1");
+	light1->diffuse = glm::vec3(0.1f, 1, 0.7f);
+	light1->specular = light1->diffuse * 0.3f;
+	light1->ambient = light1->diffuse* 0.0f;
+	myScene.lightManager.AddPointLight(light1);
+	PointLight* light2 = new PointLight(glm::vec3(0, 0, -5), "l1");
+	light2->diffuse = glm::vec3(1, 0.7f, 0.1f);
+	light2->specular = light2->diffuse * 0.3f;
+	light2->ambient = light2->diffuse * 0.0f;
+	myScene.lightManager.AddPointLight(light2);
+	//MeshRenderer enemyRenderer = MeshRenderer(VertexData::GetPrefab(ship), &shader);
+	//MeshRenderer bullet = MeshRenderer(VertexData::GetPrefab(VD_CUBE), &shader);
 
 	Texture2D specularTex;
-	specularTex.Load("assets/container_specular.png");
+	Texture2D diffuseTex;
+	Texture2D ambientTex;
+	ambientTex.Load("assets/ship/ambient.png", true);
+	diffuseTex.Load("assets/ship/diffuse.png", true);
+	specularTex.Load("assets/ship/specular.png", true);
 
-	monke1->renderer->material = &Material::collection[0];
-	//monke1->renderer->setTexture("Assets/container.png");
-	monke1->renderer->setTexture(&specularTex, 2);
+	auto player = GameObject::Create(glm::vec3(0, 0, 0), "ship", &shipRenderer);
 
-	monke3->renderer->material = &Material::collection[0];
-	//monke3->renderer->setTexture("Assets/container.png");
-	monke3->renderer->setTexture(&specularTex, 2);
+	//monke1->Rotate(glm::angleAxis(45.0f, glm::vec3(10, 10, 10)));
+	player->LocalScale(glm::vec3(0.5f, 0.5f, 0.5f));
+	shipRenderer.setTexture(&diffuseTex, 1);
+	shipRenderer.setTexture(&specularTex, 2);
+	shipRenderer.setTexture(&ambientTex, 4);
 
-	/*pointLight1->diffuse = glm::vec3(0.1, 1, 1);
-	pointLight1->attenuation = glm::vec3(1, 0.09, 0.03);
-	pointLight2->diffuse = glm::vec3(1, 1, 0.1);
-	pointLight2->attenuation = glm::vec3(1, 0.09, 0.03);
-	pointLight3->diffuse = glm::vec3(1, 0.1, 0.1);
-	pointLight3->attenuation = glm::vec3(1, 0.09, 0.03);
-	pointLight4->diffuse = glm::vec3(0.1, 1, 0.1);
-	pointLight4->attenuation = glm::vec3(1, 0.09, 0.03);*/
+	//enemyRenderer.setTexture(&diffuseTex, 1);
+	//enemyRenderer.setTexture(&specularTex, 2);
+	//enemyRenderer.setTexture(&ambientTex, 4);
+	myScene.AddObject(player);
+	myScene.AddObject(light1);
+	myScene.AddObject(light2);
 
-	//Texture2D emissionTex;
-	//emissionTex.Load("Assets/matrix.jpg");
-	//monke1->renderer->setTexture(&emissionTex, 4);
-
-
-	//monke1.reset();
+	//Material emissive = Material(glm::vec3(0, 1, 1), glm::vec3(0, 1, 1), glm::vec3(0, 1, 1), "emissive");
+	Material shipMaterial = Material(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), "ship");
+	//Material enemyMaterial = Material(glm::vec3(0.5f, 0, 0), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), "ship");
+	//bullet.material = &emissive;
+	player->renderer->material = &shipMaterial;
+	//enemyRenderer.material = &enemyMaterial;
 
 	mainCamera.SetProjection((float)glm::radians(45.0), (float)width / (float)height, 0.1f, 100.0f);
 
 	std::thread consoleThread(processConsole);
+	//player->GlobalRotate(glm::angleAxis(1.f, glm::normalize(glm::vec3(0, 1, 1))));
+	
+	//float cooldown = 1.0f;
+	//float enemyCooldown = 1.0f;
+	//int score = 0;
 
-	//ConsoleManager::PrintMatrix(mainCamera.projectionView);
-	bool show_demo_window = true;
-	bool show_another_window = true;
 	while (!glfwWindowShouldClose(window))
 	{
 		Time::Update();
+		//cooldown -= Time::deltaTime;
+		//enemyCooldown -= Time::deltaTime;
 		processInput(window);
-
 		Scene::currentScene->Update();
 
 		if (glfwGetWindowAttrib(window, GLFW_ICONIFIED) != 0)
@@ -173,29 +187,53 @@ int main()
 			ImGui_ImplGlfw_Sleep(10);
 			continue;
 		}
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		
-		ImGui::Render();
 
 		int display_w, display_h;
 		glfwGetFramebufferSize(window, &display_w, &display_h);
 		glViewport(0, 0, display_w, display_h);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		
+		player->LocalRotate(glm::angleAxis(Time::sdeltaTime/3, glm::vec3(0, 1, 0)));
+		/*glm::vec3 targetPos = glm::vec3(5, -lastMouseY / 500, lastMouseX / 500);
+		glm::vec3 newPos = Utils::Lerp(player->GetPos(), targetPos, 3*Time::sdeltaTime);
+		glm::vec3 velocity = (newPos - player->GetPos())/Time::sdeltaTime;
+		std::cout << velocity.x << " " << velocity.y << " " << velocity.z << '\n';
+		player->SetPosition(newPos);
+		mainCamera.Position = glm::vec3(0, newPos.y/5, newPos.z / 5);
+		player->SetRotation(glm::quatLookAt(
+			glm::normalize(glm::vec3(0, velocity.z/15, -1)), 
+			glm::normalize(glm::vec3(velocity.y/15, 1, 0)))
+		);
 
-		//box.Render();
-		//renderer2D.Render();
+		if (cooldown < 0 && LMBpressed)
+		{
+			Shoot(player, &bullet, glm::vec3(40.f, 0, 0), glm::vec3(10, 0, 0));
+			cooldown = 0.2f;
+		}
+		if (enemyCooldown < 0)
+		{
+			glm::vec3 pos(
+				10,
+				Utils::frand() * 3.f - 1.5f,
+				Utils::frand() * 6.f - 3.f
+			);
+			GameObject* enemy = new GameObject(pos, "enemy", &enemyRenderer);
+			enemy->AddBehaviour(new Enemy(score));
+			enemy->GlobalScale(glm::vec3(0.03f, 0.03f, 0.03f));
+			enemy->LocalRotate(glm::angleAxis(glm::pi<float>(), glm::vec3(0, 1, 0)));
+			myScene.AddObject(enemy);
+			enemyCooldown = 1.f;
+		}*/
+
 		shader.Use();
-		//std::cout << lightPos.x << ' ' << lightPos.y << ' ' << lightPos.z << '\n';
 		shader.SetVec3("viewPos", mainCamera.Position);
 
 		myScene.lightManager.fetchPointLights(&shader);
 
 		Scene::currentScene->Render();
 
-		//glEnable(GL_CULL_FACE);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -203,14 +241,13 @@ int main()
 		glm::mat4 proj = glm::ortho(0.0f, (float)width, 0.0f, (float)height);
 		Shader::textShader->SetMat4("projection", proj);
 
-		FreeType::RenderText("penis", 50.0f, 500.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		//FreeType::RenderText("score:" + std::to_string(score), 100.0f, 1000.0f, 1.0f, glm::vec3(1, 1, 1));
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 
 		DestroyManager::get()->deleteAll();
+		//Sleep(10);
 	}
 
 	ImGui_ImplOpenGL3_Shutdown();
@@ -271,7 +308,8 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
 }
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
-	//ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
-		glfwSetInputMode(window, GLFW_CURSOR, (cursorEnabled = !cursorEnabled) ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+		LMBpressed = true;
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
+		LMBpressed = false;
 }

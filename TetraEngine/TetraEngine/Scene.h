@@ -9,6 +9,7 @@ public:
 	static Scene* currentScene;
 	std::string name;
 	std::vector<std::unique_ptr<GameObject>> objects;
+	std::vector<GameObject*> toDelete;
 
 	LightManager lightManager;
 	Skybox* skybox;
@@ -23,5 +24,6 @@ public:
 
 private:
 	
+	void DeleteObjects();
 };
 

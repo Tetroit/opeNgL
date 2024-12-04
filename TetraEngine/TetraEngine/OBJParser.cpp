@@ -3,7 +3,7 @@
 
 std::ifstream OBJParser::stream;
 
-void OBJParser::OBJRead(const char* path) {
+int OBJParser::OBJRead(const char* path) {
     
     stream = std::ifstream(path);
     if (!stream.good())
@@ -120,5 +120,6 @@ void OBJParser::OBJRead(const char* path) {
         mesh->LoadVerts(&verts[0], verts.size());
         mesh->LoadFaces(&faces[0], faces.size());
         mesh->Setup();
+        return mesh->id;
     }
 }

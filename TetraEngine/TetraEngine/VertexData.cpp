@@ -3,6 +3,10 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#include "assimp/scene.h"           // Output data structure
+#include "assimp/postprocess.h"     // Post processing flags
+#include "assimp/Importer.hpp"
+
 #include "VertexData.h"
 
 /*
@@ -33,6 +37,51 @@ std::shared_ptr<VertexData> VertexData::CreateVertexData()
 {
     int id = lastId++;
     std::shared_ptr<VertexData> vd = std::make_shared<VertexData>(id);
+    collection.push_back(std::move(vd));
+    return collection[id];
+}
+
+std::shared_ptr<VertexData> VertexData::LoadFromFile(const char* path)
+{
+    int id = lastId++;
+    std::shared_ptr<VertexData> vd = std::make_shared<VertexData>(id);
+
+    Assimp::Importer importer;
+
+    const aiScene* scene = importer.ReadFile(path,
+        aiProcess_CalcTangentSpace |
+        aiProcess_Triangulate |
+        aiProcess_JoinIdenticalVertices |
+        aiProcess_SortByPType);
+
+    if (nullptr == scene) {
+        std::cout << importer.GetErrorString();
+        return nullptr;
+    }
+
+    aiMesh* aimesh = scene->mMeshes[0];
+    for (int i = 0; i<aimesh->mNumVertices; i++)
+    {
+        Vertex vert = Vertex(
+            aimesh->mVertices[i].x,
+            aimesh->mVertices[i].y,
+            aimesh->mVertices[i].z,
+            aimesh->mTextureCoords[0][i].x,
+            aimesh->mTextureCoords[0][i].y,
+            aimesh->mNormals[i].x,
+            aimesh->mNormals[i].y,
+            aimesh->mNormals[i].z
+            );
+        vd->AddVert(vert);
+    }
+    for (int i = 0; i < aimesh->mNumFaces; i++)
+    {
+        aiFace face = aimesh->mFaces[i];
+        for (int j = 0; j < face.mNumIndices; j++) {
+            vd->faces.push_back(face.mIndices[j]);
+        }
+    }
+    vd->Setup();
     collection.push_back(std::move(vd));
     return collection[id];
 }
