@@ -5,11 +5,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/constants.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/quaternion.hpp>
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 #include <iostream>
 #include <thread>
@@ -120,9 +120,9 @@ int main()
 	Shader shader = Shader("shaders/lit.glvs", "shaders/lit.glfs");
 	shader.Use();
 
-	int ship = OBJParser::OBJRead("assets/meshes/ship.obj");
+	std::shared_ptr<VertexData> ship = VertexData::LoadFromFile("assets/meshes/ship.obj");
 
-	MeshRenderer shipRenderer(VertexData::GetPrefab(ship), &shader);
+	MeshRenderer shipRenderer(ship, &shader);
 	PointLight* light1 = new PointLight(glm::vec3(0, 0, 5), "l1");
 	light1->diffuse = glm::vec3(0.1f, 1, 0.7f);
 	light1->specular = light1->diffuse * 0.3f;
@@ -193,6 +193,7 @@ int main()
 		glViewport(0, 0, display_w, display_h);
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
 		
 		player->LocalRotate(glm::angleAxis(Time::sdeltaTime/3, glm::vec3(0, 1, 0)));
 		/*glm::vec3 targetPos = glm::vec3(5, -lastMouseY / 500, lastMouseX / 500);
