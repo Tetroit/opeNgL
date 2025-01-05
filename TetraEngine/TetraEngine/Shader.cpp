@@ -1,6 +1,12 @@
 
 #include "Shader.h"
 
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <glm/gtc/type_ptr.hpp>
+#include <glad/glad.h>
+
 Shader* Shader::billboardShader = nullptr;
 Shader* Shader::skyboxShader = nullptr;
 Shader* Shader::skysphereShader = nullptr;

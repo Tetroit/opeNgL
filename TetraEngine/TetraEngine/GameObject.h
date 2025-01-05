@@ -1,20 +1,12 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/common.hpp>
 #include <vector>
+#include <string>
 
-#include "Behaviour.h"
 #include "MeshRenderer.h"
 
 class Scene;
+class Behaviour;
 
 class GameObject
 {
@@ -26,7 +18,7 @@ public:
 	glm::mat4 localToGlobal;
 	Scene* scene;
 	GameObject* parent;
-	MeshRenderer* renderer = MeshRenderer::defaultRenderer;
+	MeshRenderer* renderer;
 	std::vector<GameObject*> children;
 	std::vector<Behaviour*> scripts;
 

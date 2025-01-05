@@ -2,6 +2,7 @@
 #include "Time.h"
 #include "Scene.h"
 #include "Utils.h"
+#include "GameObject.h"
 
 Enemy::Enemy(int& score) : score(score), Behaviour("enemy") 
 {

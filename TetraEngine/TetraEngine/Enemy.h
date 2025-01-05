@@ -1,5 +1,6 @@
 #pragma once
 #include "Behaviour.h"
+
 class Enemy : public Behaviour
 {
 	bool CheckCollision(GameObject* other);

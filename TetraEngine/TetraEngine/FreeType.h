@@ -7,6 +7,7 @@
 #include <map>
 
 #include "Shader.h"
+
 class FreeType
 {
 

@@ -6,11 +6,13 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
 
 #include "Utils.h"
 #include "Scene.h"
 #include "DestroyManager.h"
 #include "Time.h"
+#include "GameObject.h"
 
 GLFWwindow* ConsoleManager::window = nullptr;
 HANDLE ConsoleManager::console = GetStdHandle(STD_OUTPUT_HANDLE);

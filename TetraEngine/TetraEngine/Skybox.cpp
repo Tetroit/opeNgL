@@ -1,5 +1,11 @@
 #include "Skybox.h"
 
+#include "VertexData.h"
+#include "Shader.h"
+#include "Camera.h"
+#include "Cubemap.h"
+#include "Texture2D.h"
+
 Skybox* Skybox::current = nullptr;
 
 Skybox::Skybox(Mode mode, const char* path) : mode(mode)

@@ -24,6 +24,10 @@
 #include "PointLight.h"
 #include "Material.h"
 #include "LightRenderer.h"
+#include "VertexData.h"
+#include "Camera.h"
+#include "Texture2D.h"
+#include "Skybox.h"
 
 extern void processInput(GLFWwindow* window);
 extern void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);

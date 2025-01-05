@@ -1,6 +1,7 @@
 #pragma once
-#include <glm/glm.hpp>
 #include "Behaviour.h"
+#include <glm/glm.hpp>
+
 class Bullet : public Behaviour
 {
 	void Update();

@@ -1,7 +1,11 @@
 #pragma once
-#include "GameObject.h"
+
 #include "LightManager.h"
-#include "Skybox.h"
+#include <string>
+#include <memory>
+
+class Skybox;
+class GameObject;
 
 class Scene
 {

@@ -5,6 +5,8 @@
 #include "Camera.h"
 #include "Material.h"
 #include "Skybox.h"
+#include "Texture2D.h"
+#include "Cubemap.h"
 
 MeshRenderer* MeshRenderer::defaultRenderer;
 MeshRenderer* MeshRenderer::skyboxRenderer;

@@ -1,4 +1,7 @@
 #include "PointLight.h"
+
+#include <iostream>
+
 #include "Scene.h"
 
 PointLight::PointLight(glm::vec3 pos, const std::string name, LightRenderer* meshRenderer ) : Light(pos, name, meshRenderer)

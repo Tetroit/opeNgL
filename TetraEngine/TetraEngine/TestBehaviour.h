@@ -2,6 +2,7 @@
 #include "Behaviour.h"
 #include <glm/glm.hpp>
 #include "Time.h"
+#include "GameObject.h"
 
 class TestBehaviour : public Behaviour {
 public:

@@ -1,15 +1,7 @@
-#ifndef SHADER_H
-#define SHADER_H
-
-
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glad/glad.h>
+#pragma once
 
 #include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
+#include <glm/glm.hpp>
 
 class Shader
 {
@@ -32,4 +24,3 @@ class Shader
         void SetVec4(const std::string& name, float x, float y, float z, float w) const;
         static void InitialiseShaders();
 };
-#endif

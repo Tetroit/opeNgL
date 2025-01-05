@@ -1,5 +1,10 @@
 #include "Scene.h"
 
+#include <iostream>
+
+#include "Skybox.h"
+#include "GameObject.h"
+
 Scene* Scene::currentScene = nullptr;
 
 Scene::Scene() {

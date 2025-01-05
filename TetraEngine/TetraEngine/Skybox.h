@@ -1,11 +1,11 @@
 #pragma once
 
-#include "MeshRenderer.h"
-#include "VertexData.h"
-#include "Shader.h"
-#include "Camera.h"
-#include "Cubemap.h"
-#include "Texture2D.h"
+#include <memory>
+
+class Cubemap;
+class Texture2D;
+class Shader;
+class VertexData;
 
 class Skybox
 {
