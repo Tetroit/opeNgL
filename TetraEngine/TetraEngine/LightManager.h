@@ -1,7 +1,10 @@
 #pragma once
 
-#include "Light.h"
-#include "PointLight.h"
+#include <vector>
+#include <glm/glm.hpp>
+
+class PointLight;
+class Shader;
 
 class LightManager
 {

@@ -1,7 +1,7 @@
 #include "PointLight.h"
 #include "Scene.h"
 
-PointLight::PointLight(glm::vec3 pos, const std::string name, LightRenderer* meshRenderer) : Light(pos, name, meshRenderer)
+PointLight::PointLight(glm::vec3 pos, const std::string name, LightRenderer* meshRenderer ) : Light(pos, name, meshRenderer)
 {
 	attenuation = glm::vec3(1,0,0);
 }

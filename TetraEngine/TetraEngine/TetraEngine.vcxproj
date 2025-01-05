@@ -148,9 +148,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application.cpp" />
     <ClCompile Include="Behaviour.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ConsoleManager.cpp" />
+    <ClCompile Include="Core.cpp" />
     <ClCompile Include="Cubemap.cpp" />
     <ClCompile Include="DestroyManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -184,10 +187,12 @@
     <ClCompile Include="VertexData.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application.h" />
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConsoleManager.h" />
+    <ClInclude Include="Core.h" />
     <ClInclude Include="Cubemap.h" />
     <ClInclude Include="DestroyManager.h" />
     <ClInclude Include="Enemy.h" />

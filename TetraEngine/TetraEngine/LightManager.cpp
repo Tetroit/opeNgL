@@ -1,5 +1,9 @@
 #include "LightManager.h"
+
 #include <string>
+#include "Light.h"
+#include "PointLight.h"
+#include "Shader.h"
 
 void LightManager::fetchPointLights(Shader* shader)
 {

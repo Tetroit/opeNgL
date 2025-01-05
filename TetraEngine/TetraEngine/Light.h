@@ -1,7 +1,11 @@
 #pragma once
-#include "MeshRenderer.h"
+
+#include <glm/glm.hpp>
+
 #include "GameObject.h"
 #include "LightRenderer.h"
+
+class LightRenderer;
 
 class Light : public GameObject
 {
@@ -10,6 +14,6 @@ public:
 	glm::vec3 diffuse;
 	glm::vec3 specular;
 	void Render() override;
-	Light(glm::vec3 pos, const std::string name = "object", LightRenderer* meshRenderer = &LightRenderer::defaultRenderer);
-	static Light* Create(glm::vec3 pos, const std::string name = "object", LightRenderer* meshRenderer = &LightRenderer::defaultRenderer);
+	Light(glm::vec3 pos, const std::string name, LightRenderer* meshRenderer = LightRenderer::defaultRenderer);
+	static Light* Create(glm::vec3 pos, const std::string name, LightRenderer* meshRenderer = LightRenderer::defaultRenderer);
 };

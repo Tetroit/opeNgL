@@ -3,7 +3,7 @@
 
 glm::mat4 GameObject::currentTransform = glm::mat4(1);
 
-GameObject::GameObject(glm::vec3 pos, const std::string name, MeshRenderer* meshRenderer)
+GameObject::GameObject(glm::vec3 pos, const std::string name, MeshRenderer* meshRenderer) : renderer(meshRenderer)
 {
 	this->name = name;
 	parent = nullptr;

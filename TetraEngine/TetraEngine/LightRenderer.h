@@ -1,6 +1,9 @@
 #pragma once
+
 #include "MeshRenderer.h"
-#include "LightRenderer.h"
+
+class VertexData;
+class Shader;
 
 struct LightInfo {
 
@@ -19,7 +22,7 @@ protected:
 public:
 
 	static void InitialiseRenderer();
-	static LightRenderer defaultRenderer;
+	static LightRenderer* defaultRenderer;
 	LightRenderer();
 	void Render(glm::mat4 transform = glm::mat4(1)) override;
 };

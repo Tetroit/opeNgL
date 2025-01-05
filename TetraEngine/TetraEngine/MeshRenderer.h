@@ -1,21 +1,24 @@
 #pragma once
 
-#include "Shader.h"
-#include "VertexData.h"
-#include "Camera.h"
-#include "Material.h"
-#include "Skybox.h"
+#include <memory>
+#include <glm/glm.hpp>
 
 #define DIFFUSE_TEXTURE_BIT 0x1
 #define SPECULAR_TEXTURE_BIT 0x2
 #define EMISSION_TEXTURE_BIT 0x4
 
+class Texture2D;
+class Material;
+class Camera;
+class Shader;
+class VertexData;
+
 class MeshRenderer
 {
 
 public:
-	static MeshRenderer defaultRenderer;
-	static MeshRenderer skyboxRenderer;
+	static MeshRenderer* defaultRenderer;
+	static MeshRenderer* skyboxRenderer;
 
 	std::shared_ptr<VertexData> mesh;
 	Texture2D* diffuseTexture;

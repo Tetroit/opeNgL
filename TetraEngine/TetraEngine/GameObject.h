@@ -11,11 +11,10 @@
 #include <glm/common.hpp>
 #include <vector>
 
-#include "MeshRenderer.h"
 #include "Behaviour.h"
+#include "MeshRenderer.h"
 
 class Scene;
-
 
 class GameObject
 {
@@ -27,14 +26,14 @@ public:
 	glm::mat4 localToGlobal;
 	Scene* scene;
 	GameObject* parent;
-	MeshRenderer* renderer = &MeshRenderer::defaultRenderer;
+	MeshRenderer* renderer = MeshRenderer::defaultRenderer;
 	std::vector<GameObject*> children;
 	std::vector<Behaviour*> scripts;
 
-	GameObject(glm::vec3 pos, const std::string name = "object", MeshRenderer* meshRenderer = &MeshRenderer::defaultRenderer);
+	GameObject(glm::vec3 pos, const std::string name = "object", MeshRenderer* meshRenderer = MeshRenderer::defaultRenderer);
 	~GameObject();
 
-	static GameObject* Create(glm::vec3 pos, const std::string name = "object", MeshRenderer* meshRenderer = &MeshRenderer::defaultRenderer);
+	static GameObject* Create(glm::vec3 pos, const std::string name = "object", MeshRenderer* meshRenderer = MeshRenderer::defaultRenderer);
 	void Delete();
 	void Rename(const std::string);
 	void UpdateMatrix();

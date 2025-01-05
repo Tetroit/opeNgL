@@ -1,3 +1,4 @@
+#include "VertexData.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -7,7 +8,7 @@
 #include "assimp/postprocess.h"     // Post processing flags
 #include "assimp/Importer.hpp"
 
-#include "VertexData.h"
+#include "OBJParser.h"
 
 /*
 * 1.Constructor

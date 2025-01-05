@@ -3,11 +3,6 @@
 #include <glm/glm.hpp>
 #include <string>
 #include <vector>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-
-#include "Utils.h"
 
 class Material
 {

@@ -19,8 +19,11 @@
 #include "ConsoleManager.h"
 #include "TestBehaviour.h"
 #include "FreeType.h"
-#include "Bullet.h"
-#include "Enemy.h"
+#include "Application.h"
+#include "DestroyManager.h"
+#include "PointLight.h"
+#include "Material.h"
+#include "LightRenderer.h"
 
 extern void processInput(GLFWwindow* window);
 extern void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
@@ -39,22 +42,6 @@ void InitialisePresets()
 	MeshRenderer::InitialiseRenderer();
 	LightRenderer::InitialiseRenderer();
 	Material::Initialize();
-}
-void Shoot(GameObject* ship, MeshRenderer* bullet, glm::vec3 velocity = glm::vec3(1,0,0), glm::vec3 offset = glm::vec3(0,0,0)) {
-	glm::vec3 pos = ship->TransformPoint(offset);
-	glm::vec3 dir = glm::normalize(ship->TransformDirection(velocity));
-
-	GameObject* instance = new GameObject(pos, "bullet", bullet);
-	Bullet* script = new Bullet();
-	script->velocity = velocity;
-	instance->AddBehaviour(script);
-
-	instance->LocalRotate(glm::rotation(glm::normalize(velocity), dir));
-	instance->LocalScale(glm::vec3(0.4f, 0.04f, 0.04f));
-	instance -> UpdateMatrix();
-
-	std::cout << instance->GetGlobalPos().x << " " << instance->GetGlobalPos().y << " " << instance->GetGlobalPos().z << " " << '\n';
-	ship->scene->AddObject(instance);
 }
 
 Camera mainCamera = Camera(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
@@ -177,8 +164,6 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		Time::Update();
-		//cooldown -= Time::deltaTime;
-		//enemyCooldown -= Time::deltaTime;
 		processInput(window);
 		Scene::currentScene->Update();
 
@@ -196,36 +181,6 @@ int main()
 		
 		
 		player->LocalRotate(glm::angleAxis(Time::sdeltaTime/3, glm::vec3(0, 1, 0)));
-		/*glm::vec3 targetPos = glm::vec3(5, -lastMouseY / 500, lastMouseX / 500);
-		glm::vec3 newPos = Utils::Lerp(player->GetPos(), targetPos, 3*Time::sdeltaTime);
-		glm::vec3 velocity = (newPos - player->GetPos())/Time::sdeltaTime;
-		std::cout << velocity.x << " " << velocity.y << " " << velocity.z << '\n';
-		player->SetPosition(newPos);
-		mainCamera.Position = glm::vec3(0, newPos.y/5, newPos.z / 5);
-		player->SetRotation(glm::quatLookAt(
-			glm::normalize(glm::vec3(0, velocity.z/15, -1)), 
-			glm::normalize(glm::vec3(velocity.y/15, 1, 0)))
-		);
-
-		if (cooldown < 0 && LMBpressed)
-		{
-			Shoot(player, &bullet, glm::vec3(40.f, 0, 0), glm::vec3(10, 0, 0));
-			cooldown = 0.2f;
-		}
-		if (enemyCooldown < 0)
-		{
-			glm::vec3 pos(
-				10,
-				Utils::frand() * 3.f - 1.5f,
-				Utils::frand() * 6.f - 3.f
-			);
-			GameObject* enemy = new GameObject(pos, "enemy", &enemyRenderer);
-			enemy->AddBehaviour(new Enemy(score));
-			enemy->GlobalScale(glm::vec3(0.03f, 0.03f, 0.03f));
-			enemy->LocalRotate(glm::angleAxis(glm::pi<float>(), glm::vec3(0, 1, 0)));
-			myScene.AddObject(enemy);
-			enemyCooldown = 1.f;
-		}*/
 
 		shader.Use();
 		shader.SetVec3("viewPos", mainCamera.Position);
@@ -237,11 +192,13 @@ int main()
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		Shader::textShader->Use();
-		glm::mat4 proj = glm::ortho(0.0f, (float)width, 0.0f, (float)height);
-		Shader::textShader->SetMat4("projection", proj);
+		//transparent render
 
-		//FreeType::RenderText("score:" + std::to_string(score), 100.0f, 1000.0f, 1.0f, glm::vec3(1, 1, 1));
+		//overlay
+
+		glm::mat4 proj = glm::ortho(0.0f, (float)width, 0.0f, (float)height);
+		Shader::textShader->Use();
+		Shader::textShader->SetMat4("projection", proj);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

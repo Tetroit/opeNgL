@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "Camera.h"
 #include "Cubemap.h"
+#include "Texture2D.h"
 
 class Skybox
 {

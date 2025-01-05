@@ -42,9 +42,9 @@ public:
         }
 
     }
-    static std::shared_ptr<std::vector<std::string>> Words(std::string line, char separator, bool ignoreEmpty = true) {
+    static std::vector<std::string> Words(std::string line, char separator, bool ignoreEmpty = true) {
 
-        auto res = std::make_shared<std::vector<std::string>>();
+        std::vector<std::string> res;
         int wordStart = 0;
         for (int i = 0; i < line.size(); i++)
         {
@@ -53,7 +53,7 @@ public:
                 if (wordStart != i || !ignoreEmpty)
                 {
                     std::string word = line.substr(wordStart, i - wordStart);
-                    res->push_back(word);
+                    res.push_back(word);
                     wordStart = i + 1;
                 }
             }
@@ -61,7 +61,7 @@ public:
         if (wordStart < line.size())
         {
             std::string word = line.substr(wordStart, line.size() - wordStart);
-            res->push_back(word);
+            res.push_back(word);
         }
         return res;
     }

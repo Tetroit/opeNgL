@@ -1,16 +1,11 @@
 #pragma once
-#include "Shader.h"
-#include "Texture2D.h"
-#include "Time.h"
-#include "OBJParser.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <memory>
 #include <vector>
-#include <map>
-#include "Material.h"
 
 #define VD_RECTANGLE 0
 #define VD_CUBE 1

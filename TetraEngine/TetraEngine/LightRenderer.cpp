@@ -1,7 +1,9 @@
 #include "LightRenderer.h"
+#include "VertexData.h"
+#include "Camera.h"
+#include "Shader.h"
 
-
-LightRenderer LightRenderer::defaultRenderer = LightRenderer(nullptr, nullptr);\
+LightRenderer* LightRenderer::defaultRenderer;
 
 LightRenderer::LightRenderer() : MeshRenderer(VertexData::GetPrefab(0), Shader::billboardShader) {
 }
@@ -21,5 +23,5 @@ void LightRenderer::Render(glm::mat4 transform) {
     mesh->Draw();
 }
 void LightRenderer::InitialiseRenderer() {
-    defaultRenderer = LightRenderer();
+    defaultRenderer = new LightRenderer();
 }

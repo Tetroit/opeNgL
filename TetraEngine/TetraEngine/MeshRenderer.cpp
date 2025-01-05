@@ -1,7 +1,13 @@
 #include "MeshRenderer.h"
 
-MeshRenderer MeshRenderer::defaultRenderer = MeshRenderer(nullptr, nullptr);
-MeshRenderer MeshRenderer::skyboxRenderer = MeshRenderer(nullptr, nullptr);
+#include "Shader.h"
+#include "VertexData.h"
+#include "Camera.h"
+#include "Material.h"
+#include "Skybox.h"
+
+MeshRenderer* MeshRenderer::defaultRenderer;
+MeshRenderer* MeshRenderer::skyboxRenderer;
 
 MeshRenderer::MeshRenderer(std::shared_ptr<VertexData> vd, Shader* sh) : mesh(vd), shader(sh), camera(Camera::main), material(Material::defaultMaterial) {
     diffuseTexture = nullptr;
@@ -80,8 +86,8 @@ void MeshRenderer::setTexture(const char* path)
 }
 
 void MeshRenderer::InitialiseRenderer() {
-    defaultRenderer = MeshRenderer(VertexData::GetPrefab(VD_RECTANGLE), Shader::billboardShader);
-    defaultRenderer.setTexture("assets/default.png");
-    skyboxRenderer = MeshRenderer(VertexData::GetPrefab(VD_RECTANGLE), Shader::skysphereShader);
-    skyboxRenderer.setTexture("assets/skybox.jpg");
+    defaultRenderer = new MeshRenderer(VertexData::GetPrefab(VD_RECTANGLE), Shader::billboardShader);
+    defaultRenderer->setTexture("assets/default.png");
+    skyboxRenderer = new MeshRenderer(VertexData::GetPrefab(VD_RECTANGLE), Shader::skysphereShader);
+    skyboxRenderer->setTexture("assets/skybox.jpg");
 }

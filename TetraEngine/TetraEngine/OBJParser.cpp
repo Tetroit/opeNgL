@@ -1,5 +1,12 @@
 #include "OBJParser.h"
+
+#include <iostream>
+#include <sstream>
+#include <vector>
+#include <string>
+
 #include "Utils.h"
+#include "VertexData.h"
 
 std::ifstream OBJParser::stream;
 

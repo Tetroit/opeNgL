@@ -1,5 +1,11 @@
 #include "Material.h"
 
+#include <fstream>
+#include <sstream>
+#include <iostream>
+
+#include "Utils.h"
+
 Material* Material::defaultMaterial = nullptr;
 std::vector<Material> Material::collection;
 int Material::lastId = 0;

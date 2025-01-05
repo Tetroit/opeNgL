@@ -1,7 +1,8 @@
 #pragma once
 
-#include "GameObject.h"
 #include <queue>
+
+class GameObject;
 
 class DestroyManager
 {
