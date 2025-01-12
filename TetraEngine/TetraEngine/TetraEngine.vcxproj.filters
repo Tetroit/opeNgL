@@ -40,6 +40,12 @@
     <Filter Include="Header Files\extern\imgui">
       <UniqueIdentifier>{f738d96a-76ba-47fa-aac3-40a410b66bd2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Apps">
+      <UniqueIdentifier>{d313042f-2f5a-4b7b-a53b-38ed6a5b5ca9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Apps">
+      <UniqueIdentifier>{f19e853f-d757-4b49-8508-396103b7ae80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TetraEngine.cpp">
@@ -146,6 +152,9 @@
     </ClCompile>
     <ClCompile Include="LightManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyApplication.cpp">
+      <Filter>Source Files\Apps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -259,6 +268,9 @@
     </ClInclude>
     <ClInclude Include="Core.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyApplication.h">
+      <Filter>Header Files\Apps</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

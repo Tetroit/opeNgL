@@ -172,6 +172,7 @@
     <ClCompile Include="LightRenderer.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="MeshRenderer.cpp" />
+    <ClCompile Include="MyApplication.cpp" />
     <ClCompile Include="OBJParser.cpp">
       <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
     </ClCompile>
@@ -213,6 +214,7 @@
     <ClInclude Include="LightRenderer.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MeshRenderer.h" />
+    <ClInclude Include="MyApplication.h" />
     <ClInclude Include="OBJParser.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Scene.h" />

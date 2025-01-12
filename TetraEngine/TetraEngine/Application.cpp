@@ -1,7 +1,6 @@
 #include "Application.h"
-#include "Core.h"
 
-void Application::Start()
+void Application::Update()
 {
 
 }

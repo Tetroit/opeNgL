@@ -2,8 +2,10 @@
 
 class Application
 {
+private:
 public:
-	void Start();
-	void Update();
+	Application() = default;
+	~Application() = default;
+	virtual void Update();
 };
 

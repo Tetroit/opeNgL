@@ -12,7 +12,7 @@ Scene::Scene() {
 	mainCamera->SetProjection((float)glm::radians(45.0), (float)Core::width / (float)Core::height, 0.1f, 100.0f);
 	objects.clear();
 	toDelete.clear();
-	utilizedRenderers.clear();
+	utilizedShaders.clear();
 	if (currentScene == nullptr)
 		currentScene = this;
 }
@@ -25,6 +25,7 @@ Scene::~Scene() {
 }
 void Scene::Render() {
 
+	SetGlobalShaderData();
 	if (skybox != nullptr)
 	{
 		skybox->Render();
@@ -44,10 +45,16 @@ void Scene::Update() {
 	DeleteObjects();
 }
 void Scene::AddObject(GameObject* go) {
+
 	std::unique_ptr<GameObject> ptr(go);
+
 	go->scene = this;
 	go->OnSceneAdded(this);
+
+	RegisterShader(go->renderer->shader);
+
 	objects.push_back(std::move(ptr));
+
 	for (GameObject* child : go->children)
 		AddObject(child);
 }
@@ -63,6 +70,7 @@ void Scene::DeleteObjects()
 {
 	for (GameObject* go : toDelete)
 	{
+		DeregisterShader(go->renderer->shader);
 		go->OnSceneRemoved();
 		int pos = FindObject(go);
 		if (pos != -1)
@@ -82,4 +90,43 @@ void Scene::RemoveObject(GameObject* go) {
 			return;
 	}
 	toDelete.push_back(go);
+}
+
+void Scene::RegisterShader(Shader* shader)
+{
+	auto iterator = utilizedShaders.find(shader);
+	if (iterator != utilizedShaders.end())
+	{
+		iterator->second++;
+		return;
+	}
+
+	utilizedShaders.emplace(shader, 1);
+}
+
+void Scene::DeregisterShader(Shader* shader)
+{
+	auto iterator = utilizedShaders.find(shader);
+	if (iterator != utilizedShaders.end())
+	{
+		if (iterator->second == 1)
+			utilizedShaders.erase(iterator);
+		else
+			iterator->second--;
+		return;
+	}
+	throw std::out_of_range("tried to remove shader, but no such shader exists");
+}
+
+void Scene::SetGlobalShaderData()
+{
+	if (utilizedShaders.size() == 0) return;
+	for (auto key : utilizedShaders)
+	{
+		Shader* shader = key.first;
+		shader->Use();
+
+		shader->SetVec3("viewPos", mainCamera->Position);
+		lightManager.fetchPointLights(shader);
+	}
 }

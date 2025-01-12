@@ -3,6 +3,7 @@
 #include "LightManager.h"
 #include <string>
 #include <memory>
+#include <map>
 
 class Skybox;
 class GameObject;
@@ -17,16 +18,19 @@ public:
 	std::string name;
 	std::vector<std::unique_ptr<GameObject>> objects;
 	std::vector<GameObject*> toDelete;
-	std::vector<Shader*> utilizedRenderers;
+	std::map<Shader*, int> utilizedShaders;
 
 	LightManager lightManager;
-	Skybox* skybox;
+	Skybox* skybox = nullptr;
 	Camera* mainCamera = nullptr;
 
 	Scene();
 	~Scene();
 	void AddObject(GameObject* go);
 	void RemoveObject(GameObject* go);
+	void RegisterShader(Shader* shader);
+	void DeregisterShader(Shader* shader);
+	void SetGlobalShaderData();
 	void Render();
 	void Update();
 	int FindObject(GameObject*);

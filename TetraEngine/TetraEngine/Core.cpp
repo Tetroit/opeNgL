@@ -1,4 +1,5 @@
 #include "Core.h"
+#include "MyApplication.h"
 
 ImGuiIO* Core::io = nullptr;
 GLFWwindow* Core::window = nullptr;
@@ -11,6 +12,8 @@ float Core::lastMouseY;
 
 bool Core::LMBpressed = false;
 bool Core::cursorEnabled = false;
+
+Application* Core::application = nullptr;
 
 void Core::processConsole() {
 
@@ -69,7 +72,7 @@ void Core::mouse_button_callback(GLFWwindow* window, int button, int action, int
 
 int Core::Initialize()
 {
-
+	
 	std::srand(time(NULL));
 
 	glfwInit();
@@ -140,6 +143,7 @@ void Core::InitializePresets()
 	std::cout << "materials initialized\n";
 }
 
+
 void Core::Update()
 {
 
@@ -157,6 +161,10 @@ void Core::Update()
 	glViewport(0, 0, display_w, display_h);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	application->Update();
+
+	Scene::currentScene->Render();
 
 }
 void Core::UpdateOverlay()

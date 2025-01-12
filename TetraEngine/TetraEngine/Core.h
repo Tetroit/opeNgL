@@ -41,8 +41,18 @@ public:
 	static float lastMouseX, lastMouseY;
 	static bool LMBpressed;
 	static bool cursorEnabled;
+	static Application* application;
 
 private:
+
+	template <typename T>
+	static void CreateApplication() {
+		if (std::is_base_of<Application, T>::value)
+			application = new T();
+		else
+			throw std::invalid_argument("input is not an application type");
+	}
+
 	static int Initialize();
 	static void InitializePresets();
 	static void Update();
