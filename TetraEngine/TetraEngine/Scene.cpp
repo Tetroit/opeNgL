@@ -2,14 +2,17 @@
 
 #include <iostream>
 
-#include "Skybox.h"
-#include "GameObject.h"
+#include "Core.h"
 
 Scene* Scene::currentScene = nullptr;
 
 Scene::Scene() {
+
+	mainCamera = new Camera(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	mainCamera->SetProjection((float)glm::radians(45.0), (float)Core::width / (float)Core::height, 0.1f, 100.0f);
 	objects.clear();
 	toDelete.clear();
+	utilizedRenderers.clear();
 	if (currentScene == nullptr)
 		currentScene = this;
 }
@@ -18,8 +21,10 @@ Scene::~Scene() {
 		objects[i]->scene = nullptr;
 	objects.clear();
 	toDelete.clear();
+	delete mainCamera;
 }
 void Scene::Render() {
+
 	if (skybox != nullptr)
 	{
 		skybox->Render();
@@ -43,6 +48,8 @@ void Scene::AddObject(GameObject* go) {
 	go->scene = this;
 	go->OnSceneAdded(this);
 	objects.push_back(std::move(ptr));
+	for (GameObject* child : go->children)
+		AddObject(child);
 }
 int Scene::FindObject(GameObject* go) {
 	for (int i = 0; i < objects.size(); i++)

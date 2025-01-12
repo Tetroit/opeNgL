@@ -11,6 +11,7 @@ Shader* Shader::billboardShader = nullptr;
 Shader* Shader::skyboxShader = nullptr;
 Shader* Shader::skysphereShader = nullptr;
 Shader* Shader::textShader = nullptr;
+Shader* Shader::currentShader = nullptr;
 
 Shader::Shader(const char* vertexPath, const char* fragmentPath)
 {
@@ -90,6 +91,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
 }
 
 void Shader::Use() {
+    currentShader = this;
     glUseProgram(ID);
 }
 

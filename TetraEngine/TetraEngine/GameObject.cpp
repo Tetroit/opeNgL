@@ -42,6 +42,7 @@ void GameObject::AddChild (GameObject* child)
 {
 	children.push_back(child);
 	child->parent = this;
+	scene->AddObject(child);
 }
 
 GameObject* GameObject::Create(glm::vec3 pos, const std::string name, MeshRenderer* meshRenderer) {

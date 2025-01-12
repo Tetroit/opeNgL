@@ -6,17 +6,22 @@
 
 class Skybox;
 class GameObject;
+class Camera;
+class Shader;
 
 class Scene
 {
 public:
 	static Scene* currentScene;
+
 	std::string name;
 	std::vector<std::unique_ptr<GameObject>> objects;
 	std::vector<GameObject*> toDelete;
+	std::vector<Shader*> utilizedRenderers;
 
 	LightManager lightManager;
 	Skybox* skybox;
+	Camera* mainCamera = nullptr;
 
 	Scene();
 	~Scene();

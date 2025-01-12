@@ -10,8 +10,10 @@ class Shader
         static Shader* skysphereShader;
         static Shader* skyboxShader;
         static Shader* textShader;
+        static Shader* currentShader;
 
 		unsigned int ID;
+        bool isUpdatedThisFrame = false;
         Shader(const char* vertexPath, const char* fragmentPath);
         void Use();
         void SetBool(const std::string& name, bool value) const;

@@ -38,9 +38,13 @@ int OBJParser::OBJRead(const char* path) {
 
             if (words[0] == "o") {
                 if (mesh != nullptr) {
+                    //new object in file
+                    //load generated one
                     mesh->LoadVerts(&verts[0], verts.size());
                     mesh->LoadFaces(&faces[0], faces.size());
                     mesh->Setup();
+
+                    std::cout << "mesh has been loaded\n";
                 }
                 mesh = VertexData::CreateVertexData();
                 verts.clear();
@@ -124,9 +128,12 @@ int OBJParser::OBJRead(const char* path) {
         }
     }
     if (mesh != nullptr) {
+        //load last object
         mesh->LoadVerts(&verts[0], verts.size());
         mesh->LoadFaces(&faces[0], faces.size());
         mesh->Setup();
+
+        std::cout << "mesh has been loaded\n";
         return mesh->id;
     }
 }

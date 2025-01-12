@@ -33,7 +33,8 @@ void MeshRenderer::Render(glm::mat4 transform) {
     }
     glm::mat4 view = Camera::main->GetViewMatrix();
 
-    shader->Use();
+    if (Shader::currentShader != shader)
+        shader->Use();
 
     if (material != nullptr) {
         shader->SetVec3("surface.ambient", material->ambient);
