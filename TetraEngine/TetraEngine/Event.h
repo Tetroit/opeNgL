@@ -25,26 +25,26 @@ public:
 class EventDispatcher
 {
 	using func = std::function<void(const Event<int>&)>;
-	std::map<int, std::vector<func>> listeners;
+	std::map<int, std::vector<func>> calls;
 public:
 	void AddListener(int type, const func& function)
 	{
-		listeners[type].push_back(function);
+		calls[type].push_back(function);
 	};
 	void RemoveListener(int type, const func& function) {
-		if (listeners.find(type) == listeners.end()) return;
+		if (calls.find(type) == calls.end()) return;
 
-		auto loc = std::find(listeners[type].begin(), listeners[type].end(), function);
-		if (loc == listeners[type].end()) return;
+		auto loc = std::find(calls[type].begin(), calls[type].end(), function);
+		if (loc == calls[type].end()) return;
 
-		listeners[type].erase(loc);
+		calls[type].erase(loc);
 	}
 	void Invoke(const Event<int>& event)
 	{
 		auto qualifier = event.GetType();
-		if (listeners.find(event.GetType()) == listeners.end()) return;
+		if (calls.find(event.GetType()) == calls.end()) return;
 
-		for (auto&& listener : listeners.at(event.GetType())) {
+		for (auto&& listener : calls.at(event.GetType())) {
 			listener(event);
 		}
 	}

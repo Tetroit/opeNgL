@@ -7,11 +7,11 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 
 template <typename T>
 class Event
 {
-
 private:
 	T type;
 	std::string name;
@@ -19,61 +19,116 @@ private:
 protected:
 	virtual bool Handled() const { return handled; };
 public:
+
 	std::string GetName() const { return name; };
 	inline T GetType() const { return type; }
+
+	template <typename EventType>
+	inline EventType ToType() const {
+		if (std::is_base_of<Event<T>, EventType>::value)
+			return static_cast<const EventType&> (*this);
+		else
+			throw std::invalid_argument("wrong event type");
+	}
 	Event(T eventType, std::string eventName = "new event") : name(eventName), type(eventType) {};
 };
 
+template <typename T>
+struct EventListener
+{
+	void (*function) (const Event<T>&);
+
+	EventListener(void (*function) (const Event<T>&)) : function(function) { };
+
+	void operator()(const Event<T>& ev) { function(ev); };
+	bool operator== (const EventListener& other) const { return (function == other.function); };
+};
+
+template <typename T>
+struct EventListenerHasher
+{
+	std::size_t operator()(const EventListener<T>& listener) const {
+		return std::hash<void*>()(reinterpret_cast<void*>(listener.function));
+	}
+};
+
+template <typename T>
 class EventDispatcher
 {
-	using func = std::function<void(const Event<int>&)>;
-	std::map<int, std::vector<func>> listeners;
+	using func = EventListener<T>;
+	using funcHasher = EventListenerHasher<T>;
+	using funcIter = typename std::vector<func>::iterator;
+
+	std::map<T, std::vector<func>> calls;
+	std::unordered_map<func, T, funcHasher> listeners;
+
 public:
-	void AddListener(int type, const func& function)
+	funcIter AddListener(T type, const func& function)
 	{
-		listeners[type].push_back(function);
+		calls[type].push_back(function);
+		int handle = calls[type].size() - 1;
+		listeners.emplace(function, type);
+		return calls[type].begin() + handle;
 	};
-	void RemoveListener(int type, const func& function) {
-		if (listeners.find(type) == listeners.end()) return;
 
-		auto loc = std::find(listeners[type].begin(), listeners[type].end(), &function);
-		if (loc == listeners[type].end()) return;
-
-		listeners[type].erase(loc);
+	bool RemoveListener(T type, const func& function)
+	{
+		auto loc = std::find(calls[type].begin(), calls[type].end(), function);
+		if (loc == calls[type].end()) {
+			std::cout<<"no listener found for type\n";
+			return false;
+		}
+		calls[type].erase(loc);
+		return true;
 	}
-	void Invoke(const Event<int>& event)
+	bool RemoveListener(const func& function)
+	{
+		auto loc = listeners.find(function);
+		if (loc == listeners.end()) {
+			std::cout << "no listener found\n"; 
+			return false;
+		}
+		return RemoveListener(loc->second, loc->first);
+	}
+	void Invoke(const Event<T>& event)
 	{
 		auto qualifier = event.GetType();
-		if (listeners.find(event.GetType()) == listeners.end()) return;
+		if (calls.find(event.GetType()) == calls.end()) return;
 
-		for (auto&& listener : listeners.at(event.GetType())) {
+		for (auto&& listener : calls.at(event.GetType())) {
 			listener(event);
 		}
 	}
 };
 
-class A {
-public:
-	int a = 0;
-	A(int i = 1) {
-		a = i;
-	}
-	~A() {
-		std::cout << a;
-	}
+enum Act {
+	PRESS,
+	HOWER
 };
-void* ptr;
-std::vector<std::shared_ptr<A>> collection;
 
-void foo(Event<int> ev)
+class KeyEvent : public Event<Act> {
+public:
+	int key;
+	KeyEvent(Act act, int key) : Event<Act>(act, "Key Event"), key(key) {};
+};
+
+void foo(const Event<Act>& ev)
 {
-	std::cout << ev.GetType();
+	KeyEvent keyEv = ev.ToType<KeyEvent>();
+	std::cout << keyEv.key << "\n";
 }
+void foo2(const Event<Act>& ev)
+{
+	std::cout << ev.GetType() << " e\n";
+}
+
+KeyEvent myEvent(PRESS, 2);
 
 int main()
 {
-	EventDispatcher dispatcher;
-	Event<int> myEvent (1);
-	dispatcher.AddListener(1, foo);
+	EventDispatcher<Act> dispatcher;
+	dispatcher.AddListener(PRESS, foo2);
+	dispatcher.AddListener(PRESS, foo);
 	dispatcher.Invoke(myEvent);
+	return 0;
 }
