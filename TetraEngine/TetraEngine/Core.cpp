@@ -1,5 +1,6 @@
 #include "Core.h"
 #include "MyApplication.h"
+#include "Event.h"
 
 ImGuiIO* Core::io = nullptr;
 GLFWwindow* Core::window = nullptr;

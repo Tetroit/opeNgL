@@ -157,6 +157,7 @@
     <ClCompile Include="Cubemap.cpp" />
     <ClCompile Include="DestroyManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Event.cpp" />
     <ClCompile Include="FreeType.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="include\imgui\imgui.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="Cubemap.h" />
     <ClInclude Include="DestroyManager.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Event.h" />
     <ClInclude Include="FreeType.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="include\imgui\imconfig.h" />

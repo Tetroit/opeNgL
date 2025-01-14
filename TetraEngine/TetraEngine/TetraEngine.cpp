@@ -18,6 +18,7 @@ int main()
 
 	while (!glfwWindowShouldClose(Core::window))
 	{
+		//layers
 		Core::Update();
 		Core::UpdateOverlay();
 		Core::AfterUpdate();
