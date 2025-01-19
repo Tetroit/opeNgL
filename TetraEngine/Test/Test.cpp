@@ -57,13 +57,12 @@ class EventDispatcher
 {
 	using func = EventListener<T>;
 	using funcHasher = EventListenerHasher<T>;
-	using funcIter = typename std::vector<func>::iterator;
 
 	std::map<T, std::vector<func>> calls;
 	std::unordered_map<func, T, funcHasher> listeners;
 
 public:
-	funcIter AddListener(T type, const func& function)
+	void AddListener(T type, const func& function)
 	{
 		calls[type].push_back(function);
 		int handle = calls[type].size() - 1;

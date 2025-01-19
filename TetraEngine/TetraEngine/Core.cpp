@@ -1,6 +1,7 @@
 #include "Core.h"
 #include "MyApplication.h"
 #include "Event.h"
+#include <iostream>
 
 ImGuiIO* Core::io = nullptr;
 GLFWwindow* Core::window = nullptr;
@@ -43,6 +44,9 @@ void Core::processInput(GLFWwindow* window)
 			Scene::currentScene->mainCamera->ProcessKeyboard(UP, Time::deltaTime);
 		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 			Scene::currentScene->mainCamera->ProcessKeyboard(DOWN, Time::deltaTime);
+
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+			InputManager::OnKeyDown(GLFW_KEY_Q);
 	}
 
 }
@@ -71,9 +75,19 @@ void Core::mouse_button_callback(GLFWwindow* window, int button, int action, int
 		LMBpressed = false;
 }
 
+
+void foo(const Event<InputManager::KeyEvents>& ev) 
+{
+	InputManager::KeyEvent kev = ev.ToType<InputManager::KeyEvent>();
+	std::cout << kev.key<<'\n';
+};
+
 int Core::Initialize()
 {
-	
+
+	InputManager::keyDispatcher.AddListener(InputManager::KeyDown, foo);
+
+
 	std::srand(time(NULL));
 
 	glfwInit();
