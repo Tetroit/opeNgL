@@ -5,7 +5,7 @@ class Application
 private:
 public:
 	Application() = default;
-	~Application() = default;
+	virtual ~Application() = default;
 	virtual void Update();
 };
 

@@ -1,25 +1,41 @@
 #pragma once
 #include "Event.h"
+#include "GLFWContext.h"
 
+#ifdef TETRA_GLFW
+typedef GLFWContext::KeyInfo KeyInfo;
+#endif // TETRA_GLFW
 
-static class InputManager
+class KeyEvent : public Event<KeyInfo> {
+public:
+	KeyEvent(int key, int mode, std::string name) : Event<KeyInfo>(KeyInfo(key, mode), name) {};
+};
+class AnyKeyEvent : public Event<KeyInfo>
 {
 public:
-	enum KeyEvents {
-		KeyDown,
-		KeyUp
-	};
-	
-	class KeyEvent : public Event<KeyEvents> {
+	int key;
+	AnyKeyEvent(int key, int mode, std::string name) : Event<KeyInfo>(KeyInfo(mode), name), key(key) {};
+};
 
-	public:
-		KeyEvent(KeyEvents ev, int key, std::string name = "Key event") : Event<KeyEvents>(ev, name), key(key) {}
-		int key;
-	};
+class InputManager
+{
+private:
 
-	static EventDispatcher<KeyEvents> keyDispatcher;
+	void DispatchKeyEvent(KeyInfo info);
 
-	static void OnKeyDown(int i);
-	static void OnKeyUp(int i);
+public:
+
+	bool anyPressed = false;
+	bool keys[1024];
+	EventDispatcher<KeyInfo> keyDispatcher;
+
+	InputManager();
+	~InputManager();
+	void OnKeyDown(int key);
+	void OnKeyUp(int key);
+	void OnKeyPressed(int key);
+	void UpdateKeys();
+
+	void foo(const Event<KeyInfo>& ev);
 };
 

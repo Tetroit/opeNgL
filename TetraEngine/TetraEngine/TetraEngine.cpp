@@ -16,7 +16,7 @@ int main()
 
 	std::thread consoleThread(Core::processConsole);
 
-	while (!glfwWindowShouldClose(Core::window))
+	while (!glfwWindowShouldClose(Core::glfwContext->window))
 	{
 		//layers
 		Core::Update();

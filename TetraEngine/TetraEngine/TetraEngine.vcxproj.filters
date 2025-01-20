@@ -46,6 +46,9 @@
     <Filter Include="Source Files\Apps">
       <UniqueIdentifier>{f19e853f-d757-4b49-8508-396103b7ae80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Vendors">
+      <UniqueIdentifier>{78401a80-8b19-4db2-b1c7-015e10b6a78f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TetraEngine.cpp">
@@ -157,6 +160,9 @@
       <Filter>Source Files\Apps</Filter>
     </ClCompile>
     <ClCompile Include="Event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GLFWContext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -276,6 +282,9 @@
       <Filter>Header Files\Apps</Filter>
     </ClInclude>
     <ClInclude Include="Event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GLFWContext.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

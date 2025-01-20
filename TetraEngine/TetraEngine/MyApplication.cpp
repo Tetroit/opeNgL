@@ -51,6 +51,10 @@ MyApplication::MyApplication()
 }
 MyApplication::~MyApplication()
 {
+	std::cout << "app destroyed";
+
+	delete shipRenderer;
+	delete litShader;
 }
 void MyApplication::Update()
 {

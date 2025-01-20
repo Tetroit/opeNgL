@@ -34,19 +34,22 @@ public:
 template <typename T>
 struct EventListener
 {
-	void (*function) (const Event<T>&);
+	std::function<void(const Event<T>&)> function;
+	//void (*function) (const Event<T>&);
 
 	EventListener(void (*function) (const Event<T>&)) : function(function) { };
+	EventListener(std::function<void(const Event<T>&)> function) : function(function) { };
 
 	void operator()(const Event<T>& ev) { function(ev); };
-	bool operator== (const EventListener& other) const { return (function == other.function); };
+	bool operator== (const EventListener& other) const { 
+		return (function.target<void(const Event<T>&)>() == other.function.target<void(const Event<T>&)>()); };
 };
 
 template <typename T>
 struct EventListenerHasher
 {
 	std::size_t operator()(const EventListener<T>& listener) const {
-		return std::hash<void*>()(reinterpret_cast<void*>(listener.function));
+		return std::hash<void*>()(reinterpret_cast<void*>(listener.function.target<void(const Event<T>&)>()));
 	}
 };
 
@@ -66,6 +69,13 @@ public:
 		calls[type].push_back(function);
 		int handle = calls[type].size() - 1;
 		listeners.emplace(function, type);
+	};
+
+	template <typename Sender>
+	inline void AddListener(T type, void (Sender::* function)(const Event<T>&), const Sender& obj)
+	{
+		std::function<void(const Event<T>&)> boundFunction = std::bind(function, obj, std::placeholders::_1);
+		AddListener(type, boundFunction);
 	};
 
 	bool RemoveListener(T type, const func& function)

@@ -23,7 +23,7 @@ public:
 
 
 	MyApplication();
-	~MyApplication();
+	~MyApplication() override;
 	void Update() override;
 };
 

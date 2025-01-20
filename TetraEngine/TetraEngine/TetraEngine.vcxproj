@@ -160,6 +160,7 @@
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="FreeType.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GLFWContext.cpp" />
     <ClCompile Include="include\imgui\imgui.cpp" />
     <ClCompile Include="include\imgui\imgui_demo.cpp" />
     <ClCompile Include="include\imgui\imgui_draw.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="Event.h" />
     <ClInclude Include="FreeType.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GLFWContext.h" />
     <ClInclude Include="include\imgui\imconfig.h" />
     <ClInclude Include="include\imgui\imgui.h" />
     <ClInclude Include="include\imgui\imgui_impl_glfw.h" />

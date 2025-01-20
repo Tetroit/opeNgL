@@ -33,16 +33,20 @@
 #include "Skybox.h"
 #include "OBJParser.h"
 
+#define SET_KEY_EVENT(Type, keyInfo, func, obj) Core::inputManager->keyDispatcher.AddListener<Type>(keyInfo, &Type::func, obj);
+
 static class Core
 {
 public:
-	static GLFWwindow* window;
+
 	static ImGuiIO* io;
 	static unsigned int width, height;
 	static float lastMouseX, lastMouseY;
-	static bool LMBpressed;
 	static bool cursorEnabled;
 	static Application* application;
+
+	static GLFWContext* glfwContext;
+	static InputManager* inputManager;
 
 private:
 
@@ -63,10 +67,9 @@ private:
 
 	//console
 	static void processConsole();
+	static void CloseApplication(const Event<KeyInfo>& ev);
 	//input
 	static void processInput(GLFWwindow* window);
-	static void mouse_callback(GLFWwindow* window, double xposIn, double yposIn);
-	static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 	friend int main();
 };

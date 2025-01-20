@@ -4,7 +4,6 @@
 #include <iostream>
 
 ImGuiIO* Core::io = nullptr;
-GLFWwindow* Core::window = nullptr;
 
 unsigned int Core::width = 1920;
 unsigned int Core::height = 1080;
@@ -12,21 +11,31 @@ unsigned int Core::height = 1080;
 float Core::lastMouseX;
 float Core::lastMouseY;
 
-bool Core::LMBpressed = false;
 bool Core::cursorEnabled = false;
 
 Application* Core::application = nullptr;
+GLFWContext* Core::glfwContext = nullptr;
+InputManager* Core::inputManager = nullptr;
 
 void Core::processConsole() {
 
 	std::string command;
-	while (!glfwWindowShouldClose(window))
+	while (!glfwWindowShouldClose(glfwContext->window))
 	{
 		std::getline(std::cin, command);
 		ConsoleManager::ParseCommand(command);
 	}
 }
 
+void Core::CloseApplication(const Event<KeyInfo>& ev) {
+
+	if (ev.GetType().bits.any) return;
+	KeyEvent keyEvent = ev.ToType<KeyEvent>();
+
+	if (ev.GetType().bits.key == GLFW_KEY_ESCAPE 
+	&& ev.GetType().bits.action == GLFW_PRESS)
+		glfwSetWindowShouldClose(glfwContext->window, true);
+}
 void Core::processInput(GLFWwindow* window)
 {
 	if (!io->WantCaptureKeyboard && !io->WantTextInput) {
@@ -44,70 +53,43 @@ void Core::processInput(GLFWwindow* window)
 			Scene::currentScene->mainCamera->ProcessKeyboard(UP, Time::deltaTime);
 		if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 			Scene::currentScene->mainCamera->ProcessKeyboard(DOWN, Time::deltaTime);
-
-		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-			InputManager::OnKeyDown(GLFW_KEY_Q);
 	}
 
 }
-void Core::mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
 
-	//ImGui_ImplGlfw_CursorPosCallback(window, xposIn, yposIn);
-	if (!io->WantCaptureMouse)
-	{
-		float posX = (float)xposIn;
-		float posY = (float)yposIn;
-		float deltaX, deltaY;
-		deltaX = posX - lastMouseX;
-		deltaY = lastMouseY - posY;
-		lastMouseX = posX;
-		lastMouseY = posY;
 
-		Scene::currentScene->mainCamera->ProcessMouseMovement(deltaX, deltaY);
+void foo(const Event<KeyInfo>& ev)
+{
+	std::cout << ev.GetName() << '\n';
+	std::cout << (int)ev.GetType().bits.key << '\n';
+};
+
+
+class MyClass {
+public:
+	void handleEvent(const Event<KeyInfo>& ev) {
+		std::cout << "Member Function Handling event with data: " << ev.GetType().raw << '\n';
 	}
-}
-
-void Core::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
-{
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-		LMBpressed = true;
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
-		LMBpressed = false;
-}
-
-
-void foo(const Event<InputManager::KeyEvents>& ev) 
-{
-	InputManager::KeyEvent kev = ev.ToType<InputManager::KeyEvent>();
-	std::cout << kev.key<<'\n';
 };
 
 int Core::Initialize()
 {
 
-	InputManager::keyDispatcher.AddListener(InputManager::KeyDown, foo);
-
-
 	std::srand(time(NULL));
 
-	glfwInit();
+	inputManager = new InputManager();
+
+	MyClass test;
+	//inputManager->keyDispatcher.AddListener<MyClass>(KeyInfo(GLFW_KEY_ESCAPE, GLFW_PRESS), &MyClass::handleEvent, test);
+
+	SET_KEY_EVENT(MyClass, KeyInfo(GLFW_KEY_ESCAPE, GLFW_PRESS), handleEvent, test);
+
+	glfwContext = new GLFWContext(1920, 1080);
+	glfwContext->inputManager = inputManager;
 
 	//window
-	window = glfwCreateWindow(1920, 1080, "showcase", NULL, NULL);
-	if (window == NULL)
-	{
-		std::cout << "Failed to create GLFW window" << std::endl;
-		glfwTerminate();
-		return -1;
-	}
 
-	glfwSetCursorPosCallback(window, mouse_callback);
-	glfwSetMouseButtonCallback(window, mouse_button_callback);
-	if (!cursorEnabled)
-		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	glfwMakeContextCurrent(window);
-	ConsoleManager::Initialize(window);
+	ConsoleManager::Initialize(glfwContext->window);
 
 	//opengl
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -132,7 +114,7 @@ int Core::Initialize()
 
 
 	ImGui::StyleColorsDark();
-	ImGui_ImplGlfw_InitForOpenGL(window, true);
+	ImGui_ImplGlfw_InitForOpenGL(glfwContext->window, true);
 #ifdef __EMSCRIPTEN__
 	ImGui_ImplGlfw_InstallEmscriptenCallbacks(window, "#canvas");
 #endif
@@ -163,16 +145,17 @@ void Core::Update()
 {
 
 	Time::Update();
-	Core::processInput(Core::window);
+	Core::processInput(Core::glfwContext->window);
+	inputManager->UpdateKeys();
 	Scene::currentScene->Update();
 
-	if (glfwGetWindowAttrib(Core::window, GLFW_ICONIFIED) != 0)
+	if (glfwGetWindowAttrib(Core::glfwContext->window, GLFW_ICONIFIED) != 0)
 	{
 		ImGui_ImplGlfw_Sleep(10);
 	}
 
 	int display_w, display_h;
-	glfwGetFramebufferSize(Core::window, &display_w, &display_h);
+	glfwGetFramebufferSize(Core::glfwContext->window, &display_w, &display_h);
 	glViewport(0, 0, display_w, display_h);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -197,14 +180,18 @@ void Core::UpdateOverlay()
 }
 void Core::AfterUpdate()
 {
-	glfwSwapBuffers(window);
+	glfwSwapBuffers(glfwContext->window);
 	glfwPollEvents();
 
 	DestroyManager::get()->deleteAll();
 }
 void Core::CleanUp() {
+
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
 	glfwTerminate();
+	delete application;
+	delete glfwContext;
+	delete inputManager;
 }
