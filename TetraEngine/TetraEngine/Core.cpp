@@ -82,7 +82,16 @@ int Core::Initialize()
 	MyClass test;
 	//inputManager->keyDispatcher.AddListener<MyClass>(KeyInfo(GLFW_KEY_ESCAPE, GLFW_PRESS), &MyClass::handleEvent, test);
 
-	SET_KEY_EVENT(MyClass, KeyInfo(GLFW_KEY_ESCAPE, GLFW_PRESS), handleEvent, test);
+	inputManager->keyDispatcher.AddListener<MyClass>(KeyInfo(GLFW_KEY_P, GLFW_PRESS), &MyClass::handleEvent, test);
+	inputManager->keyDispatcher.AddListener(KeyInfo(GLFW_KEY_P, GLFW_PRESS), &foo);
+
+	if (inputManager->keyDispatcher.RemoveListener(KeyInfo(GLFW_KEY_P, GLFW_PRESS), &foo))
+		std::cout << "event removed successfully\n\n";
+
+	if (inputManager->keyDispatcher.RemoveListener<MyClass>(KeyInfo(GLFW_KEY_P, GLFW_PRESS), &MyClass::handleEvent, test))
+		std::cout << "nonstatic event removed successfully\n\n";
+	if (inputManager->keyDispatcher.RemoveListener<MyClass>(KeyInfo(GLFW_KEY_P, GLFW_PRESS), &MyClass::handleEvent, test))
+		std::cout << "nonstatic event removed successfully\n\n";
 
 	glfwContext = new GLFWContext(1920, 1080);
 	glfwContext->inputManager = inputManager;

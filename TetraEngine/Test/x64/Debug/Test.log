@@ -1,18 +1,4 @@
 ﻿  Test.cpp
-C:\Users\pchyo\Documents\GitHub\opeNgL\TetraEngine\Test\Test.cpp(69,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\pchyo\Documents\GitHub\opeNgL\TetraEngine\Test\Test.cpp(67,1): message : while compiling class template member function 'std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>> EventDispatcher<Act>::AddListener(T,const EventListener<T> &)'
-          with
-          [
-              _Ty=EventListener<Act>,
-              T=Act
-          ]
-C:\Users\pchyo\Documents\GitHub\opeNgL\TetraEngine\Test\Test.cpp(130,24): message : see reference to function template instantiation 'std::_Vector_iterator<std::_Vector_val<std::_Simple_types<_Ty>>> EventDispatcher<Act>::AddListener(T,const EventListener<T> &)' being compiled
-          with
-          [
-              _Ty=EventListener<Act>,
-              T=Act
-          ]
-C:\Users\pchyo\Documents\GitHub\opeNgL\TetraEngine\Test\Test.cpp(129,23): message : see reference to class template instantiation 'EventDispatcher<Act>' being compiled
   Test.vcxproj -> C:\Users\pchyo\Documents\GitHub\opeNgL\TetraEngine\x64\Debug\Test.exe
   'pwsh.exe' is not recognized as an internal or external command,
   operable program or batch file.
