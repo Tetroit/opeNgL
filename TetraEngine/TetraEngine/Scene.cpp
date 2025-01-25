@@ -2,7 +2,11 @@
 
 #include <iostream>
 
+#include "Camera.h"
 #include "Core.h"
+#include "GameObject.h"
+#include "Skybox.h"
+#include "Shader.h"
 
 Scene* Scene::currentScene = nullptr;
 
@@ -10,6 +14,7 @@ Scene::Scene() {
 
 	mainCamera = new Camera(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	mainCamera->SetProjection((float)glm::radians(45.0), (float)Core::width / (float)Core::height, 0.1f, 100.0f);
+	Camera::SetMain(mainCamera);
 	objects.clear();
 	toDelete.clear();
 	utilizedShaders.clear();

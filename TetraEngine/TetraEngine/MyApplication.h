@@ -1,6 +1,13 @@
 #pragma once
 #include "Application.h"
-#include "Core.h"
+#include "Scene.h"
+#include "Shader.h"
+#include "MeshRenderer.h"
+#include "PointLight.h"
+#include "Texture2D.h"
+#include "Material.h"
+#include "GameObject.h"
+
 
 class MyApplication :  public Application
 {

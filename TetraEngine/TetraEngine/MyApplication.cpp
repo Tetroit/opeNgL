@@ -1,5 +1,9 @@
 #include "MyApplication.h"
 #include "Core.h"
+#include "Skybox.h"
+#include "OBJParser.h"
+#include "VertexData.h"
+#include "Time.h"
 
 
 MyApplication::MyApplication()

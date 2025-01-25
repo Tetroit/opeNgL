@@ -9,43 +9,27 @@
 #include <glm/gtc/constants.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
-
 #include <iostream>
 #include <thread>
 
-#include "Time.h"
-#include "Scene.h"
+#include "Application.h"
 #include "ConsoleManager.h"
 #include "InputManager.h"
-//#include "TestBehaviour.h"
-#include "FreeType.h"
-#include "Application.h"
-#include "DestroyManager.h"
-#include "PointLight.h"
-#include "Material.h"
-#include "LightRenderer.h"
-#include "VertexData.h"
-#include "Camera.h"
-#include "Texture2D.h"
-#include "Skybox.h"
-#include "OBJParser.h"
+#include "ImGuiManager.h"
+#include "GLFWManager.h"
 
-#define SET_KEY_EVENT(Type, keyInfo, func, obj) Core::inputManager->keyDispatcher.AddListener<Type>(keyInfo, &Type::func, obj);
 
 static class Core
 {
 public:
 
-	static ImGuiIO* io;
 	static unsigned int width, height;
 	static float lastMouseX, lastMouseY;
 	static bool cursorEnabled;
-	static Application* application;
 
-	static GLFWContext* glfwContext;
+	static Application* application;
+	static GLFWManager* glfwManager;
+	static ImGuiManager* imguiManager;
 	static InputManager* inputManager;
 
 private:
@@ -67,7 +51,7 @@ private:
 
 	//console
 	static void processConsole();
-	static void CloseApplication(const Event<KeyInfo>& ev);
+	static void CloseApplication(const Event<InputInfo>& ev);
 	//input
 	static void processInput(GLFWwindow* window);
 

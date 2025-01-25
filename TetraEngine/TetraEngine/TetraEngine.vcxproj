@@ -157,10 +157,10 @@
     <ClCompile Include="Cubemap.cpp" />
     <ClCompile Include="DestroyManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Event.cpp" />
     <ClCompile Include="FreeType.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GLFWContext.cpp" />
+    <ClCompile Include="GLFWManager.cpp" />
+    <ClCompile Include="ImGuiManager.cpp" />
     <ClCompile Include="include\imgui\imgui.cpp" />
     <ClCompile Include="include\imgui\imgui_demo.cpp" />
     <ClCompile Include="include\imgui\imgui_draw.cpp" />
@@ -202,7 +202,8 @@
     <ClInclude Include="Event.h" />
     <ClInclude Include="FreeType.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GLFWContext.h" />
+    <ClInclude Include="GLFWManager.h" />
+    <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="include\imgui\imconfig.h" />
     <ClInclude Include="include\imgui\imgui.h" />
     <ClInclude Include="include\imgui\imgui_impl_glfw.h" />

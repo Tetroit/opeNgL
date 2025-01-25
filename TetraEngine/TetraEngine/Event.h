@@ -59,18 +59,22 @@ struct EventListener : public EventListenerTemplate<T>
 	std::function<void(const Event<T>&)> GetFunction() const override {
 		return std::function(function);
 	}
-	bool operator== (const EventListener& other) const { 
-		return function == other.function; };
+	bool operator== (const EventListener& other) const {
+		return function == other.function;
+	};
+	void operator()(const Event<T>& ev) {
+		function(ev);
+	};
 };
 
 template <typename T, class Sender>
 struct EventListenerNonStatic : public EventListenerTemplate<T>
 {
 	void(Sender::*function)(const Event<T>&);
-	const Sender& obj;
+	Sender& obj;
 	//void (*function) (const Event<T>&);
 
-	EventListenerNonStatic(void(Sender::*function)(const Event<T>&), const Sender& obj) : EventListenerTemplate<T>(false), function(function), obj(obj) { };
+	EventListenerNonStatic(void(Sender::*function)(const Event<T>&), Sender& obj) : EventListenerTemplate<T>(false), function(function), obj(obj) { };
 
 	std::function<void(const Event<T>&)> GetFunction() const override {
 
@@ -79,15 +83,10 @@ struct EventListenerNonStatic : public EventListenerTemplate<T>
 	bool operator== (const EventListenerNonStatic& other) const {
 		return (function == other.function && &obj == &(other.obj));
 	};
+	void operator()(const Event<T>& ev) {
+		(obj.*function)(ev); 
+	};
 };
-
-//template <typename T>
-//struct EventListenerHasher
-//{
-//	std::size_t operator()(const EventListenerTemplate<T>& listener) const {
-//		return std::hash<void*>()(reinterpret_cast<void*>(listener.GetFunction()));
-//	}
-//};
 
 template <typename T>
 class EventDispatcher
@@ -97,19 +96,10 @@ class EventDispatcher
 
 	std::map<T, std::vector<std::unique_ptr<func>>> calls;
 
-private:
-
-	//int AddListener(T type, const func& function)
-	//{
-	//	calls[type].push_back((std::unique_ptr<func>)std::move(function));
-	//	int handle = calls[type].size() - 1;
-	//	return handle;
-	//};
-
 public:
 
 	template <class Sender>
-	int AddListener(T type, void (Sender::* function)(const Event<T>&), const Sender& obj)
+	int AddListener(T type, void (Sender::* function)(const Event<T>&), Sender& obj)
 	{
 		std::unique_ptr<EventListenerNonStatic<T, Sender>> created = std::make_unique<EventListenerNonStatic<T, Sender>>(function, obj);
 		calls[type].push_back(std::move(created));
@@ -139,7 +129,7 @@ public:
 		return calls[type].end();
 	}
 	template <class Sender>
-	std::vector<std::unique_ptr<func>>::iterator Find(T type, void (Sender::*function)(const Event<T>&), const Sender& obj)
+	std::vector<std::unique_ptr<func>>::iterator Find(T type, void (Sender::*function)(const Event<T>&), Sender& obj)
 	{
 		EventListenerNonStatic<T,Sender> target(function, obj);
 		auto loc = calls[type].begin();
@@ -168,7 +158,7 @@ public:
 	}
 
 	template <class Sender>
-	bool RemoveListener(T type, void (Sender::* function)(const Event<T>&), const Sender& obj)
+	bool RemoveListener(T type, void (Sender::* function)(const Event<T>&), Sender& obj)
 	{
 		auto loc = Find<Sender>(type, function, obj);
 		if (loc == calls[type].end())

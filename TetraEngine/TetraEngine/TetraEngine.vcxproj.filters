@@ -49,6 +49,9 @@
     <Filter Include="Header Files\Vendors">
       <UniqueIdentifier>{78401a80-8b19-4db2-b1c7-015e10b6a78f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Vendors">
+      <UniqueIdentifier>{9a3ca091-d072-4597-841e-f5568275cae5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TetraEngine.cpp">
@@ -159,11 +162,11 @@
     <ClCompile Include="MyApplication.cpp">
       <Filter>Source Files\Apps</Filter>
     </ClCompile>
-    <ClCompile Include="Event.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="GLFWManager.cpp">
+      <Filter>Source Files\Vendors</Filter>
     </ClCompile>
-    <ClCompile Include="GLFWContext.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ImGuiManager.cpp">
+      <Filter>Source Files\Vendors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -284,8 +287,11 @@
     <ClInclude Include="Event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GLFWContext.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="GLFWManager.h">
+      <Filter>Header Files\Vendors</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiManager.h">
+      <Filter>Header Files\Vendors</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
