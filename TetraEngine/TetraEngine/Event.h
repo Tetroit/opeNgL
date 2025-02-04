@@ -279,7 +279,7 @@ public:
 	/// <param name="obj"> Object that executes the function </param>
 	/// <returns></returns>
 	template <class Sender>
-	bool RemoveListener(T type, void (Sender::* function)(const Event<T>&), Sender& obj)
+		bool RemoveListener(T type, void (Sender::* function)(const Event<T>&), Sender& obj)
 	{
 		auto loc = Find<Sender>(type, function, obj);
 		if (loc == calls[type].end())

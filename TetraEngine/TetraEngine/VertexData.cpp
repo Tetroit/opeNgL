@@ -35,6 +35,9 @@ VertexData::VertexData(int id) : id(id)
     vert = NULL;
     verts = {};
     faces = {};
+    VBO = -1;
+    VAO = -1;
+    EBO = -1;
 }
 std::shared_ptr<VertexData> VertexData::CreateVertexData()
 {
