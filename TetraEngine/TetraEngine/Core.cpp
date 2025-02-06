@@ -63,8 +63,7 @@ void Core::processInput(GLFWwindow* window)
 		else
 			glfwManager->ToggleCursor(true);
 
-		inputManager->UpdateKeys();
-		inputManager->UpdateMouse();
+		inputManager->Update();
 	}
 
 }
@@ -160,6 +159,8 @@ void Core::UpdateOverlay()
 	glm::mat4 proj = glm::ortho(0.0f, (float)width, 0.0f, (float)height);
 	Shader::textShader->Use();
 	Shader::textShader->SetMat4("projection", proj);
+
+	FreeType::RenderText("Keys pressed: " + inputManager->pressedKeys, 10, 20, 1, glm::vec3(1, 1, 1));
 }
 void Core::AfterUpdate()
 {

@@ -1,4 +1,5 @@
 #include "InputManager.h"
+#include "FreeType.h"
 #include <functional>
 
 #include "Core.h"
@@ -210,14 +211,20 @@ void InputManager::OnMouseMove()
 
 void InputManager::Update() {
 	UpdateKeys();
+	UpdateMouse();
 }
 void InputManager::UpdateKeys()
 {
+	pressedKeys = "";
 	anyPressed = false;
 	for (int i = 0; i < TETRA_INPUT_KEY_COUNT; i++)
 	{
 		if (keys[i])
 		{
+			if (pressedKeys.size() == 0)
+				pressedKeys.append(GetKeyName(i));
+			else
+				pressedKeys.append(" & " + GetKeyName(i));
 			OnKeyPressed(i);
 			anyPressed = true;
 		}

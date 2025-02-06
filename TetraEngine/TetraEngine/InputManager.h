@@ -59,6 +59,8 @@ private:
 
 public:
 
+	std::string pressedKeys = "";
+
 	bool anyPressed = false;
 	bool keys[TETRA_INPUT_KEY_COUNT];
 	bool mouseButtons[TETRA_INPUT_MOUSE_BUTTON_COUNT];
