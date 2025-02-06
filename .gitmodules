@@ -1,0 +1,4 @@
+[submodule "TetraEngine/TetraEngine/include/imgui"]
+	path = TetraEngine/TetraEngine/include/imgui
+	url = https://github.com/ocornut/imgui
+	branch = docking

@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "Cubemap.h"
 
 #include <string>

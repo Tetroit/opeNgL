@@ -7,8 +7,11 @@
 class ImGuiManager
 {
 public:
+	bool enableDockSpace = true;
+	static void HelpMarker(const char* desc);
 	ImGuiIO* io;
 	ImGuiManager();
+	void ShowDockSpace();
 	void Update();
 	void Render();
 	~ImGuiManager();

@@ -22,23 +22,11 @@
     <Filter Include="Source Files\Managers">
       <UniqueIdentifier>{9ed91f1e-eeda-4898-9f87-b290a7f95b8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\extern">
-      <UniqueIdentifier>{b51213fb-e02a-451b-b78d-afde6cf9e0a7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Scripts">
       <UniqueIdentifier>{36a09adf-4bdf-4014-8a53-b2ecb1c3f0fc}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Scripts">
       <UniqueIdentifier>{9591e407-c77e-41eb-a7a6-46d174d8854c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\extern\imgui">
-      <UniqueIdentifier>{5996931b-f401-41d3-81e9-48f763edb807}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\extern">
-      <UniqueIdentifier>{a7da9982-c97a-4d1b-8b7c-65112d72c9f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\extern\imgui">
-      <UniqueIdentifier>{f738d96a-76ba-47fa-aac3-40a410b66bd2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Apps">
       <UniqueIdentifier>{d313042f-2f5a-4b7b-a53b-38ed6a5b5ca9}</UniqueIdentifier>
@@ -51,6 +39,9 @@
     </Filter>
     <Filter Include="Source Files\Vendors">
       <UniqueIdentifier>{9a3ca091-d072-4597-841e-f5568275cae5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Extern">
+      <UniqueIdentifier>{a8728df9-9b68-4088-9590-0310d0fa1ace}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -108,12 +99,6 @@
     <ClCompile Include="Cubemap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\glad.c">
-      <Filter>Source Files\extern</Filter>
-    </ClCompile>
-    <ClCompile Include="stb_impl.cpp">
-      <Filter>Source Files\extern</Filter>
-    </ClCompile>
     <ClCompile Include="FreeType.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
@@ -125,27 +110,6 @@
     </ClCompile>
     <ClCompile Include="InputManager.cpp">
       <Filter>Source Files\Managers</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_widgets.cpp">
-      <Filter>Source Files\extern\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_tables.cpp">
-      <Filter>Source Files\extern\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_impl_opengl3.cpp">
-      <Filter>Source Files\extern\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_impl_glfw.cpp">
-      <Filter>Source Files\extern\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_draw.cpp">
-      <Filter>Source Files\extern\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui_demo.cpp">
-      <Filter>Source Files\extern\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="include\imgui\imgui.cpp">
-      <Filter>Source Files\extern\imgui</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Source Files</Filter>
@@ -167,6 +131,36 @@
     </ClCompile>
     <ClCompile Include="ImGuiManager.cpp">
       <Filter>Source Files\Vendors</Filter>
+    </ClCompile>
+    <ClCompile Include="tetrapc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glad.c">
+      <Filter>Extern</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stb_impl.cpp">
+      <Filter>Extern</Filter>
+    </ClCompile>
+    <ClCompile Include="include\imgui\imgui_widgets.cpp">
+      <Filter>Extern</Filter>
+    </ClCompile>
+    <ClCompile Include="include\imgui\imgui.cpp">
+      <Filter>Extern</Filter>
+    </ClCompile>
+    <ClCompile Include="include\imgui\imgui_demo.cpp">
+      <Filter>Extern</Filter>
+    </ClCompile>
+    <ClCompile Include="include\imgui\imgui_draw.cpp">
+      <Filter>Extern</Filter>
+    </ClCompile>
+    <ClCompile Include="include\imgui\imgui_impl_glfw.cpp">
+      <Filter>Extern</Filter>
+    </ClCompile>
+    <ClCompile Include="include\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Extern</Filter>
+    </ClCompile>
+    <ClCompile Include="include\imgui\imgui_tables.cpp">
+      <Filter>Extern</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -233,9 +227,6 @@
     <ClInclude Include="Cubemap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>Header Files\extern</Filter>
-    </ClInclude>
     <ClInclude Include="FreeType.h">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
@@ -247,33 +238,6 @@
     </ClInclude>
     <ClInclude Include="InputManager.h">
       <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imconfig.h">
-      <Filter>Header Files\extern\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imgui.h">
-      <Filter>Header Files\extern\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imgui_impl_glfw.h">
-      <Filter>Header Files\extern\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imgui_impl_opengl3.h">
-      <Filter>Header Files\extern\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imgui_impl_opengl3_loader.h">
-      <Filter>Header Files\extern\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imgui_internal.h">
-      <Filter>Header Files\extern\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imstb_rectpack.h">
-      <Filter>Header Files\extern\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imstb_textedit.h">
-      <Filter>Header Files\extern\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="include\imgui\imstb_truetype.h">
-      <Filter>Header Files\extern\imgui</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Header Files</Filter>
@@ -292,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="ImGuiManager.h">
       <Filter>Header Files\Vendors</Filter>
+    </ClInclude>
+    <ClInclude Include="tetrapc.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

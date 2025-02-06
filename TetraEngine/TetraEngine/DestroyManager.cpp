@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "DestroyManager.h"
 #include "Scene.h";
 

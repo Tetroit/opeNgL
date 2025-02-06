@@ -1,5 +1,18 @@
+#include "tetrapc.h"
 #include "ImGuiManager.h"
 #include "Core.h"
+
+void ImGuiManager::HelpMarker(const char* desc)
+{
+	ImGui::TextDisabled("(?)");
+	if (ImGui::BeginItemTooltip())
+	{
+		ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+		ImGui::TextUnformatted(desc);
+		ImGui::PopTextWrapPos();
+		ImGui::EndTooltip();
+	}
+}
 
 ImGuiManager::ImGuiManager()
 {
@@ -8,18 +21,61 @@ ImGuiManager::ImGuiManager()
 
 	io = &ImGui::GetIO(); (void)io;
 	io->ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-
+	io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(Core::glfwManager->window, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
 }
+void ImGuiManager::ShowDockSpace()
+{
+	bool opt_fullscreen = true;
+	bool opt_padding = false;
+	ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+	ImGuiWindowFlags window_flags =
+		ImGuiWindowFlags_MenuBar |
+		ImGuiWindowFlags_NoDocking |
+		ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoResize |
+		ImGuiWindowFlags_NoBringToFrontOnFocus |
+		ImGuiWindowFlags_NoNavFocus |
+		ImGuiWindowFlags_NoTitleBar;
 
+	ImGuiViewport* viewport = ImGui::GetMainViewport();
+	ImGui::SetNextWindowPos(viewport->WorkPos);
+	ImGui::SetNextWindowSize(viewport->WorkSize);
+	ImGui::SetNextWindowViewport(viewport->ID);
+
+	ImGui::Begin("Dockspace", &enableDockSpace, window_flags);
+	if (io->ConfigFlags & ImGuiConfigFlags_DockingEnable)
+	{
+		ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+	}
+	if (ImGui::BeginMenuBar())
+	{
+		if (ImGui::BeginMenu("Options"))
+		{
+			if (ImGui::MenuItem("Quit", NULL, false, enableDockSpace))
+			{
+				glfwSetWindowShouldClose(GLFWManager::get()->window, true);
+				enableDockSpace = false;
+			}
+			ImGui::EndMenu();
+		}
+		HelpMarker("Main app space");
+
+		ImGui::EndMenuBar();
+	}
+	ImGui::End();
+}
 void ImGuiManager::Update()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
+	if (enableDockSpace) ShowDockSpace();
 	ImGui::ShowDemoWindow(); // Show demo window! :)
 
 	if (io->WantCaptureKeyboard || io->WantTextInput) {

@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "Core.h"
 
 #include "MyApplication.h"
@@ -15,7 +16,13 @@
 #include "Skybox.h"
 #include "OBJParser.h"
 
-#include <iostream>
+extern "C" {
+	__declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+}
+
+extern "C" {
+	__declspec(dllexport) int AmdPowerXpressRequestHighPerformanc = 1;
+}
 
 unsigned int Core::width = 1920;
 unsigned int Core::height = 1080;
@@ -70,7 +77,6 @@ void Core::processInput(GLFWwindow* window)
 
 int Core::Initialize()
 {
-
 	std::srand(time(NULL));
 
 	inputManager = new InputManager();
@@ -92,6 +98,10 @@ int Core::Initialize()
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
+
+	std::cout << "Vendor: " << glGetString(GL_VENDOR) << '\n';
+	std::cout << "Renderer: " << glGetString(GL_RENDERER) << '\n';
+	std::cout << "Version: " << glGetString(GL_VERSION) << "\n\n";
 
 	glEnable(GL_DEPTH_TEST);
 

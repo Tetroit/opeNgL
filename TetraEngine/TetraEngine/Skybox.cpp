@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "Skybox.h"
 
 #include "VertexData.h"

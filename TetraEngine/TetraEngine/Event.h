@@ -6,7 +6,7 @@
 #include <map>
 #include <vector>
 #include <algorithm>
-#include <memory>
+#include <memory>	
 
 /// <summary>
 /// Event template

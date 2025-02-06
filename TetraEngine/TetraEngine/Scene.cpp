@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "Scene.h"
 
 #include <iostream>

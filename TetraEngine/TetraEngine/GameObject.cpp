@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "GameObject.h"
 
 #include <glm/glm.hpp>

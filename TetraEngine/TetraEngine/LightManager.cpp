@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "LightManager.h"
 
 #include <string>

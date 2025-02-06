@@ -1,4 +1,4 @@
-﻿
+﻿#include "tetrapc.h"
 #include "Core.h"
 #include "MyApplication.h"
 

@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "MyApplication.h"
 #include "Core.h"
 #include "Skybox.h"

@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "Bullet.h"
 #include "GameObject.h"
 #include "Time.h"

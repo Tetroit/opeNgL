@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "PointLight.h"
 
 #include <iostream>

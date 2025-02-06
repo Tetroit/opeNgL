@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "GLFWManager.h"
 #include "Scene.h"
 #include "Camera.h"

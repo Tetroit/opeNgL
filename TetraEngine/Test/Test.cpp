@@ -11,7 +11,6 @@
 #include <memory>
 
 
-
 void foo(int i)
 {
 	std::cout << i << " #1\n";

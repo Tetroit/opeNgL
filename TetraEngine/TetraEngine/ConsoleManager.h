@@ -1,8 +1,6 @@
 #pragma once
 
-#include <Windows.h>
-#include <string>
-#include <queue>
+#include "tetrapc.h"
 
 class GameObject;
 struct GLFWwindow;

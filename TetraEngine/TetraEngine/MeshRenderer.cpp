@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "MeshRenderer.h"
 
 #include "Shader.h"

@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "FreeType.h"
 
 FT_Library FreeType::ft;

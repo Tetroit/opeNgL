@@ -1,3 +1,4 @@
+#include "tetrapc.h"
 #include "InputManager.h"
 #include "FreeType.h"
 #include <functional>
@@ -295,8 +296,8 @@ void InputManager::DispatchMouseMoveEvent(InputInfo info)
 	std::string name = "Mouse moved";
 	keyDispatcher.Invoke(MouseMoveEvent(deltaMouseX, deltaMouseY, mousePosX, mousePosY, name));
 
-	std::cout << name << '\n';
-	std::cout << deltaMouseX << " " << deltaMouseY << " " << mousePosX << " " << mousePosY << '\n';
+	//std::cout << name << '\n';
+	//std::cout << deltaMouseX << " " << deltaMouseY << " " << mousePosX << " " << mousePosY << '\n';
 }
 
 #endif // TETRA_GLFW
