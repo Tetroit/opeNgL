@@ -22,7 +22,7 @@ public:
 
 	LightManager lightManager;
 	Skybox* skybox = nullptr;
-	Camera* mainCamera = nullptr;
+	Camera* cameraContext = nullptr;
 
 	Scene();
 	~Scene();
@@ -31,6 +31,7 @@ public:
 	void RegisterShader(Shader* shader);
 	void DeregisterShader(Shader* shader);
 	void SetGlobalShaderData();
+	void Render(Camera* cam);
 	void Render();
 	void Update();
 	int FindObject(GameObject*);

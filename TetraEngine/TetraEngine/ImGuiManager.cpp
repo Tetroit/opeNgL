@@ -1,6 +1,8 @@
 #include "tetrapc.h"
 #include "ImGuiManager.h"
+#include "Viewport.h"
 #include "Core.h"
+#include "Texture2D.h"
 
 void ImGuiManager::HelpMarker(const char* desc)
 {
@@ -12,6 +14,15 @@ void ImGuiManager::HelpMarker(const char* desc)
 		ImGui::PopTextWrapPos();
 		ImGui::EndTooltip();
 	}
+}
+
+void ImGuiManager::DrawTexture2D(const Texture2D& texture, int width = -1, int height = -1)
+{
+	if (width == -1)
+		width = texture.width;
+	if (height == -1)
+		height = texture.height;
+	ImGui::Image(texture.ID(), ImVec2(width, height),ImVec2(0,1), ImVec2(1, 0));
 }
 
 ImGuiManager::ImGuiManager()
@@ -26,6 +37,9 @@ ImGuiManager::ImGuiManager()
 	ImGui::StyleColorsDark();
 	ImGui_ImplGlfw_InitForOpenGL(Core::glfwManager->window, true);
 	ImGui_ImplOpenGL3_Init("#version 460");
+	
+	testTex = new Texture2D();
+	testTex->Load("assets/ship/diffuse.png", true);
 }
 void ImGuiManager::ShowDockSpace()
 {
@@ -64,9 +78,23 @@ void ImGuiManager::ShowDockSpace()
 			}
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("ImageTest")) {
+
+			DrawTexture2D(*testTex, 1280, 720);
+			ImGui::EndMenu();
+		}
 		HelpMarker("Main app space");
 
 		ImGui::EndMenuBar();
+	}
+	ImGui::End();
+}
+void ImGuiManager::ShowViewport(Viewport* vp)
+{
+	if (ImGui::Begin("Viewport", &showViewport))
+	{
+		DrawTexture2D(*vp->GetTexture(), vp->GetWidth(), vp->GetHeight());
+		allowSceneInteraction = (ImGui::IsItemHovered());
 	}
 	ImGui::End();
 }
@@ -76,9 +104,11 @@ void ImGuiManager::Update()
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 	if (enableDockSpace) ShowDockSpace();
+	if (showViewport) ShowViewport(Core::mainViewport);
 	ImGui::ShowDemoWindow(); // Show demo window! :)
 
-	if (io->WantCaptureKeyboard || io->WantTextInput) {
+	if ((io->WantCaptureKeyboard || io->WantTextInput) 
+		&& !allowSceneInteraction) {
 		if (GLFWManager::get()->sendKeyboardEvents)
 			GLFWManager::get()->ToggleKeyboardEvents(false);
 	}
@@ -86,7 +116,8 @@ void ImGuiManager::Update()
 		if (!GLFWManager::get()->sendKeyboardEvents)
 			GLFWManager::get()->ToggleKeyboardEvents(true);
 	}
-	if (io->WantCaptureMouse || io->WantCaptureKeyboard)
+	if ((io->WantCaptureMouse) 
+		&& !allowSceneInteraction)
 	{
 		if (GLFWManager::get()->sendMouseClickEvents)
 			GLFWManager::get()->ToggleMouseClickEvents(false);

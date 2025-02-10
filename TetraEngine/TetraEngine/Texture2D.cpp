@@ -7,15 +7,36 @@
 #include <string>
 #include "stb_image.h"
 
-extern unsigned char* data;
-extern unsigned int texture;
-extern int width;
-extern int height;
-extern int channels;
+
+uint Texture2D::attached = 0;
+
 
 Texture2D::Texture2D() {
 	glGenTextures(1, &texture);
 }
+
+Texture2D::Texture2D(int width, int height, int channels) : width(width), height(height), channels(channels)
+{
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	
+	int channelMode;
+	if (channels == 1) channelMode = GL_RED;
+	if (channels == 2) channelMode = GL_RG;
+	if (channels == 3) channelMode = GL_RGB;
+	if (channels == 4) channelMode = GL_RGBA;
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, channelMode, GL_UNSIGNED_BYTE, data);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
+Texture2D::~Texture2D() {
+	glDeleteTextures(1, &texture);
+}
+
+
 void Texture2D::Load(const char* name, bool flip_vertically) {
 
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -24,8 +45,10 @@ void Texture2D::Load(const char* name, bool flip_vertically) {
 	data = stbi_load(name, &width, &height, &channels, 0);
 	if (data)
 	{
-		int channelMode = GL_RGB;
+		int channelMode = 0;
 		if (channels == 1) channelMode = GL_RED;
+		if (channels == 2) channelMode = GL_RG;
+		if (channels == 3) channelMode = GL_RGB;
 		if (channels == 4) channelMode = GL_RGBA;
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, channelMode, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -44,17 +67,20 @@ void Texture2D::Load(const char* name, bool flip_vertically) {
 }
 void Texture2D::Bind(int id)
 {
-	if (this != nullptr)
-	{
-		glActiveTexture(GL_TEXTURE0 + id);
-		glBindTexture(GL_TEXTURE_2D, texture);
-	}
+	glActiveTexture(GL_TEXTURE0 + id);
+	glBindTexture(GL_TEXTURE_2D, texture);
+}
+bool Texture2D::IsAttached() const
+{
+	return (attached == texture);
 }
 void Texture2D::Unbind(int id)
 {
-	if (this != nullptr)
-	{
-		glActiveTexture(GL_TEXTURE0 + id);
-		glBindTexture(GL_TEXTURE_2D, NULL);
-	}
+	glActiveTexture(GL_TEXTURE0 + id);
+	glBindTexture(GL_TEXTURE_2D, NULL);
+}
+
+uint Texture2D::ID() const
+{
+	return texture;
 }

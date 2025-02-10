@@ -17,13 +17,13 @@
 #include "InputManager.h"
 #include "ImGuiManager.h"
 #include "GLFWManager.h"
-
+#include "Viewport.h"
 
 static class Core
 {
 public:
 
-	static unsigned int width, height;
+	static uint appWidth, appHeight;
 	static float lastMouseX, lastMouseY;
 	static bool cursorEnabled;
 
@@ -31,7 +31,7 @@ public:
 	static GLFWManager* glfwManager;
 	static ImGuiManager* imguiManager;
 	static InputManager* inputManager;
-
+	static Viewport* mainViewport;
 private:
 
 	template <typename T>

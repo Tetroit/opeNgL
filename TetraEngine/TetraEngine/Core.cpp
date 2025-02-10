@@ -24,8 +24,8 @@ extern "C" {
 	__declspec(dllexport) int AmdPowerXpressRequestHighPerformanc = 1;
 }
 
-unsigned int Core::width = 1920;
-unsigned int Core::height = 1080;
+unsigned int Core::appWidth = 1920;
+unsigned int Core::appHeight = 1080;
 
 float Core::lastMouseX;
 float Core::lastMouseY;
@@ -36,6 +36,7 @@ Application* Core::application = nullptr;
 GLFWManager* Core::glfwManager = nullptr;
 ImGuiManager* Core::imguiManager = nullptr;
 InputManager* Core::inputManager = nullptr;
+Viewport* Core::mainViewport = nullptr;
 
 void Core::processConsole() {
 
@@ -61,9 +62,7 @@ void Core::processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	if (!imguiManager->io->WantCaptureKeyboard
-		&& !imguiManager->io->WantTextInput
-		&& !imguiManager->io->WantCaptureMouse) {
+	if (glfwManager->sendMouseClickEvents) {
 
 		if (inputManager->IsMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
 			glfwManager->ToggleCursor(false);
@@ -108,6 +107,11 @@ int Core::Initialize()
 	//imgui
 	imguiManager = new ImGuiManager();
 
+	Camera* mainCamera = new Camera(glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	mainCamera->SetProjection((float)glm::radians(45.0), (float)Core::appWidth / (float)Core::appHeight, 0.1f, 100.0f);
+	Camera::SetMain(mainCamera);
+
+	mainViewport = new Viewport(1280, 720, *mainCamera);
 	//presets
 	Core::InitializePresets();
 
@@ -152,9 +156,11 @@ void Core::Update()
 
 	application->Update();
 
-	Scene::currentScene->Render();
+	mainViewport->Bind();
+	Scene::currentScene->Render(Camera::main);
 
-	imguiManager->Render();
+	imguiManager->testTex = mainViewport->GetTexture();
+
 
 }
 void Core::UpdateOverlay()
@@ -166,11 +172,14 @@ void Core::UpdateOverlay()
 
 	//overlay
 
-	glm::mat4 proj = glm::ortho(0.0f, (float)width, 0.0f, (float)height);
+	glm::mat4 proj = glm::ortho(0.0f, (float)appWidth, 0.0f, (float)appHeight);
 	Shader::textShader->Use();
 	Shader::textShader->SetMat4("projection", proj);
 
 	FreeType::RenderText("Keys pressed: " + inputManager->pressedKeys, 10, 20, 1, glm::vec3(1, 1, 1));
+
+	mainViewport->Unbind(appWidth, appHeight);
+	imguiManager->Render();
 }
 void Core::AfterUpdate()
 {
@@ -180,7 +189,7 @@ void Core::AfterUpdate()
 	DestroyManager::get()->deleteAll();
 }
 void Core::CleanUp() {
-
+	delete mainViewport;
 	delete application;
 	delete imguiManager;
 	delete glfwManager;

@@ -2,15 +2,22 @@
 
 class Texture2D
 {
+	uint texture;
+	static uint attached;
 public:
-	Texture2D();
 	int width;
 	int height;
 	int channels;
-	unsigned int texture;
 	unsigned char* data;
+
+	Texture2D();
+	Texture2D(int width, int height, int channels = 3);
+	~Texture2D();
+
+	static void Unbind(int id = 0);
 	void Load(const char* name, bool flip_vertically = false);
 	void Bind(int id = 0);
-	void Unbind(int id = 0);
+	bool IsAttached() const;
+	uint ID() const;
 };
 

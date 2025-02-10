@@ -173,6 +173,7 @@ xcopy /y /d /e "$(ProjectDir)shaders" "$(OutDir)shaders\"</Command>
     <ClCompile Include="Cubemap.cpp" />
     <ClCompile Include="DestroyManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Framebuffer.cpp" />
     <ClCompile Include="FreeType.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GLFWManager.cpp" />
@@ -209,6 +210,7 @@ xcopy /y /d /e "$(ProjectDir)shaders" "$(OutDir)shaders\"</Command>
       <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
     </ClCompile>
     <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="Renderbuffer.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Skybox.cpp" />
@@ -226,6 +228,7 @@ xcopy /y /d /e "$(ProjectDir)shaders" "$(OutDir)shaders\"</Command>
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="VertexData.cpp" />
+    <ClCompile Include="Viewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -238,9 +241,11 @@ xcopy /y /d /e "$(ProjectDir)shaders" "$(OutDir)shaders\"</Command>
     <ClInclude Include="DestroyManager.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="Framebuffer.h" />
     <ClInclude Include="FreeType.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GLFWManager.h" />
+    <ClInclude Include="Renderbuffer.h" />
     <ClInclude Include="tetrapc.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="InputManager.h" />
@@ -260,6 +265,7 @@ xcopy /y /d /e "$(ProjectDir)shaders" "$(OutDir)shaders\"</Command>
     <ClInclude Include="Time.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VertexData.h" />
+    <ClInclude Include="Viewport.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
