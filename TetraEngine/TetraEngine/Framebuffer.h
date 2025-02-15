@@ -7,8 +7,8 @@ class Framebuffer
 	unsigned int fbo;
 	Texture2D* texture;
 	Renderbuffer* renderbuffer;
-	unsigned int width;
-	unsigned int height;
+	uint width;
+	uint height;
 public:
 	static unsigned int current;
 
@@ -18,6 +18,8 @@ public:
 	void BindTexture(Texture2D* texture, uint attachment = GL_COLOR_ATTACHMENT0);
 	void BindRenderbuffer(Renderbuffer* rb);
 	Texture2D* GetTexture();
+	uint GetWidth() const;
+	uint GetHeight() const;
 	bool IsAttached();
 	void Resize(int w, int h);
 	static bool IsComplete();

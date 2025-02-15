@@ -52,6 +52,16 @@ Texture2D* Framebuffer::GetTexture()
 	return texture;
 }
 
+uint Framebuffer::GetWidth() const
+{
+	return width;
+}
+uint Framebuffer::GetHeight() const
+{
+	return height;
+}
+
+
 bool Framebuffer::IsAttached()
 {
 	return (current == fbo);
@@ -61,6 +71,10 @@ void Framebuffer::Resize(int w, int h)
 {
 	width = w;
 	height = h;
+	if (renderbuffer != nullptr)
+		renderbuffer->Resize(w, h);
+	if (texture != nullptr)
+		texture->Resize(w, h);
 }
 
 bool Framebuffer::IsComplete()

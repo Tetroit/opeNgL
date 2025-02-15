@@ -11,6 +11,15 @@ Renderbuffer::Renderbuffer(uint width, uint height)
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 }
 
+void Renderbuffer::Resize(uint width, uint height)
+{
+	if (current != rbo) glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+
+	if (current != rbo) glBindRenderbuffer(GL_RENDERBUFFER, 0);
+}
+
 void Renderbuffer::Bind() const
 {
 	glBindRenderbuffer(GL_RENDERBUFFER, rbo);

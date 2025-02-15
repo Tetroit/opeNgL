@@ -93,8 +93,11 @@ void ImGuiManager::ShowViewport(Viewport* vp)
 {
 	if (ImGui::Begin("Viewport", &showViewport))
 	{
-		DrawTexture2D(*vp->GetTexture(), vp->GetWidth(), vp->GetHeight());
-		allowSceneInteraction = (ImGui::IsItemHovered());
+		ImVec2 avail_size = ImGui::GetContentRegionAvail();
+		vp->SetSize(avail_size.x, avail_size.y);
+		DrawTexture2D(*vp->GetTexture(), avail_size.x, avail_size.y);
+		if (!allowSceneInteraction)
+			allowSceneInteraction = ImGui::IsItemHovered();
 	}
 	ImGui::End();
 }

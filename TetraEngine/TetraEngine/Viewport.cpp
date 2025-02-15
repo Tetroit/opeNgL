@@ -32,17 +32,18 @@ void Viewport::Bind()
 
 uint Viewport::GetWidth()
 {
-	return cam->width;
+	return framebuffer->GetWidth();
 }
 uint Viewport::GetHeight()
 {
-	return cam->height;
+	return framebuffer->GetHeight();
 }
 
 void Viewport::SetSize(uint width, uint height)
 {
-	cam->width = width;
-	cam->height = height;
+	cam->SetProjection((float)glm::radians(45.0), (float)width / (float)height, 0.1f, 100.0f);
+	framebuffer->Resize(width, height);
+	//glViewport(0, 0, width, height);
 }
 
 Texture2D* Viewport::GetTexture()

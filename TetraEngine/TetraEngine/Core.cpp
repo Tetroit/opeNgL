@@ -62,12 +62,15 @@ void Core::processInput(GLFWwindow* window)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 
-	if (glfwManager->sendMouseClickEvents) {
+	if (imguiManager->allowSceneInteraction) {
 
 		if (inputManager->IsMouseButtonDown(GLFW_MOUSE_BUTTON_RIGHT))
 			glfwManager->ToggleCursor(false);
 		else
+		{
+			imguiManager->allowSceneInteraction = false;
 			glfwManager->ToggleCursor(true);
+		}
 
 		inputManager->Update();
 	}
@@ -150,7 +153,7 @@ void Core::Update()
 
 	int display_w, display_h;
 	glfwGetFramebufferSize(Core::glfwManager->window, &display_w, &display_h);
-	glViewport(0, 0, display_w, display_h);
+	//glViewport(0, 0, display_w, display_h);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -172,7 +175,7 @@ void Core::UpdateOverlay()
 
 	//overlay
 
-	glm::mat4 proj = glm::ortho(0.0f, (float)appWidth, 0.0f, (float)appHeight);
+	glm::mat4 proj = glm::ortho(0.0f, (float)mainViewport->GetWidth(), 0.0f, (float)mainViewport->GetHeight());
 	Shader::textShader->Use();
 	Shader::textShader->SetMat4("projection", proj);
 

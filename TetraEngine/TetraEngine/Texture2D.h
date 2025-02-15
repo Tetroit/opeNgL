@@ -18,6 +18,7 @@ public:
 	void Load(const char* name, bool flip_vertically = false);
 	void Bind(int id = 0);
 	bool IsAttached() const;
+	void Resize(uint width, uint height);
 	uint ID() const;
 };
 

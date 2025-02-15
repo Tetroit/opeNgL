@@ -80,6 +80,18 @@ void Texture2D::Unbind(int id)
 	glBindTexture(GL_TEXTURE_2D, NULL);
 }
 
+void Texture2D::Resize(uint width, uint height)
+{
+	if (attached != texture) glBindTexture(GL_TEXTURE_2D, texture);
+
+	this->width = width;
+	this->height = height;
+	int format;
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &format);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+
+	if (attached != texture) glBindTexture(GL_TEXTURE_2D, 0);
+}
 uint Texture2D::ID() const
 {
 	return texture;

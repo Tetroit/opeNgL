@@ -16,6 +16,7 @@ Scene::Scene() {
 	objects.clear();
 	toDelete.clear();
 	utilizedShaders.clear();
+	RegisterShader(Shader::textShader);
 	if (currentScene == nullptr)
 		currentScene = this;
 }

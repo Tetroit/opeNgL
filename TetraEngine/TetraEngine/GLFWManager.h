@@ -68,7 +68,6 @@ public:
 	InputManager* inputManager = nullptr;
 
 	bool cursorEnabled = false;
-
 	unsigned int width = 1920, height = 1080;
 	float lastMouseX = 0, lastMouseY = 0;
 
